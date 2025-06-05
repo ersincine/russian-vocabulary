@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: 100+ Russian Verbs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        .verb-card-details {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .verb-card.active .verb-card-details {
+            max-height: 450px;
+            /* Increased to accommodate more forms */
+            margin-top: 1rem;
+        }
+
+        .nav-button.active {
+            background-color: #4A5568;
+            /* A darker, complementary gray for active state */
+            color: #FFFFFF;
+        }
+
+        .literal-translation {
+            color: #718096;
+            /* Slightly lighter gray for literal translation */
+            font-style: italic;
+            font-size: 0.8rem;
+            /* Smaller font for literal translation */
+        }
+
+        .verb-forms-title {
+            font-size: 0.9rem;
+            color: #374151;
+            /* Slightly darker gray for subtitle */
+        }
+
+        .form-label {
+            color: #4B5563;
+            /* Medium gray for form labels */
+        }
+
+        .form-value {
+            color: #1F2937;
+            /* Darker gray for form values */
+        }
+
+        .info-section {
+            background-color: #F9FAFB;
+            /* Light gray background for info section */
+            border: 1px solid #E5E7EB;
+            /* Light border */
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">100+ Russian Verbs</h1>
+            <p class="mt-2 text-lg text-gray-600">An Interactive Study Guide</p>
+        </header>
+
+        <nav id="category-nav" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
+        </nav>
+
+        <section class="info-section p-4 rounded-lg mb-10 text-sm text-gray-700 bg-blue-50 border border-blue-200">
+            <h2 class="text-lg font-semibold text-gray-800 mb-3">Understanding Russian Verb Forms</h2>
+            <p class="mb-2">When you click on a verb card, you'll find details designed to clarify key aspects of
+                Russian verbs, especially the distinction between actions viewed as ongoing or habitual (<strong
+                    class="font-medium">imperfective aspect</strong>) versus completed or result-oriented (<strong
+                    class="font-medium">perfective aspect</strong>). Featured forms include:</p>
+            <ul class="list-disc list-inside mt-2 space-y-2">
+                <li>
+                    <strong class="font-medium">Perfective Infinitive:</strong> The verb's basic "to..." form that
+                    signifies an action completed or achieving a specific result. (e.g., <code
+                        class="text-xs bg-gray-100 p-0.5 rounded">сделать</code> - to do and finish).
+                </li>
+                <li>
+                    <strong class="font-medium">Unidirectional Infinitives (Imperfective/Perfective):</strong>
+                    Specifically for verbs of motion (like "to go," "to run"). These show the "to..." forms for movement
+                    <em class="font-italic">in a single, specific direction</em>. You'll see both:
+                    <ul class="list-inside list-disc ml-4 mt-1 text-xs">
+                        <li>Imperfective: ongoing one-way motion (e.g., <code
+                                class="text-xs bg-gray-100 p-0.5 rounded">идти</code> - to be going one way)</li>
+                        <li>Perfective: a completed one-way trip or the start of one (e.g., <code
+                                class="text-xs bg-gray-100 p-0.5 rounded">пойти</code> - to set off/go one way)</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="font-medium">Past Tense ("he" form, Imperfective/Perfective):</strong> Shows the past
+                    tense form for a masculine singular subject ("he did"). This helps illustrate aspectual differences
+                    in the past:
+                    <ul class="list-inside list-disc ml-4 mt-1 text-xs">
+                        <li>Imperfective: action in progress, repeated, or a general fact in the past (e.g., <code
+                                class="text-xs bg-gray-100 p-0.5 rounded">он читал</code> - he was reading/used to
+                            read).</li>
+                        <li>Perfective: action completed in the past (e.g., <code
+                                class="text-xs bg-gray-100 p-0.5 rounded">он прочитал</code> - he read/finished
+                            reading).</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong class="font-medium">Imperative ("you" singular, Imperfective/Perfective):</strong> The
+                    command form for telling one person (informal "you," or <code
+                        class="text-xs bg-gray-100 p-0.5 rounded">ты</code>) to do something. Again, shown for both
+                    aspects:
+                    <ul class="list-inside list-disc ml-4 mt-1 text-xs">
+                        <li>Imperfective: command to perform an action generally, or to continue it (e.g., <code
+                                class="text-xs bg-gray-100 p-0.5 rounded">читай!</code> - Read!).</li>
+                        <li>Perfective: command to complete an action successfully (e.g., <code
+                                class="text-xs bg-gray-100 p-0.5 rounded">прочитай!</code> - Read it all!).</li>
+                    </ul>
+                </li>
+            </ul>
+            <p class="mt-3">This selection of forms is designed to provide a clear comparison, helping you grasp how
+                Russian verbs change to convey these crucial aspectual meanings. However, please note that not all verbs
+                will have every form listed. Some verbs are primarily used in one aspect, and certain words expressing
+                necessity or obligation (like <code class="text-xs bg-gray-100 p-0.5 rounded">должен</code> - 'must', or
+                <code class="text-xs bg-gray-100 p-0.5 rounded">нужно</code> - 'it is necessary') function differently
+                and don't conjugate in this standard way.
+            </p>
+        </section>
+
+        <main id="verb-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500">
+            <p>Click on a card to see details and other forms.</p>
+        </footer>
+    </div>
+
+    <script>
+        const verbData = [
+            { category: "Being & State", russian: "быть", pronunciation: "[bit']", english: "to be", example_ru: "Он студент.", example_ru_literal: "He student (is).", example_en: "He is a student.", forms: { past_m_imp: "был", imp_s_imp: "будь" } },
+            { category: "Being & State", russian: "являться", pronunciation: "[yeev-LYAT'-sya]", english: "to be, appear (formal)", example_ru: "Он является лидером.", example_ru_literal: "He appears (as) leader.", example_en: "He is a leader.", forms: { pf_inf: "явиться", past_m_imp: "являлся", past_m_pf: "явился", imp_s_pf: "явись" } },
+            { category: "Being & State", russian: "становиться", pronunciation: "[sta-nah-VEET'-sya]", english: "to become", example_ru: "Он становится сильнее.", example_ru_literal: "He becomes stronger.", example_en: "He is becoming stronger.", forms: { pf_inf: "стать", past_m_imp: "становился", past_m_pf: "стал", imp_s_pf: "стань" } },
+            { category: "Being & State", russian: "оказываться", pronunciation: "[a-KAH-zi-vat'-sya]", english: "to turn out to be", example_ru: "Он оказывается прав.", example_ru_literal: "He turns-out right.", example_en: "He turns out to be right.", forms: { pf_inf: "оказаться", past_m_imp: "оказывался", past_m_pf: "оказался", imp_s_pf: "окажись" } },
+            { category: "Being & State", russian: "находиться", pronunciation: "[na-kha-DEET'-sya]", english: "to be located", example_ru: "Он находится дома.", example_ru_literal: "He is-located at-home.", example_en: "He is at home.", forms: { pf_inf: "найтись (different meaning)", past_m_imp: "находился" } },
+            { category: "Being & State", russian: "существовать", pronunciation: "[soo-shches-tva-VAT']", english: "to exist", example_ru: "Он существует.", example_ru_literal: "He exists.", example_en: "He exists.", forms: { past_m_imp: "существовал" } },
+            { category: "Being & State", russian: "оставаться", pronunciation: "[as-ta-VAT'-sya]", english: "to remain, stay", example_ru: "Он остаётся здесь.", example_ru_literal: "He remains here.", example_en: "He remains here.", forms: { pf_inf: "остаться", past_m_imp: "оставался", past_m_pf: "остался", imp_s_pf: "останься" } },
+            { category: "Being & State", russian: "выглядеть", pronunciation: "[VIG-lya-det']", english: "to look, appear", example_ru: "Он выглядит хорошо.", example_ru_literal: "He looks good.", example_en: "He looks good.", forms: { past_m_imp: "выглядел" } }, // Often considered bi-aspectual or perfective use is less common in basic forms
+            { category: "Being & State", russian: "казаться", pronunciation: "[ka-ZAT'-sya]", english: "to seem, appear", example_ru: "Он кажется усталым.", example_ru_literal: "He seems tired.", example_en: "He seems tired.", forms: { pf_inf: "показаться", past_m_imp: "казался", past_m_pf: "показался" } },
+            { category: "Being & State", russian: "значить", pronunciation: "[ZNA-cheet']", english: "to mean, signify", example_ru: "Это много значит.", example_ru_literal: "This much means.", example_en: "It means a lot.", forms: { past_m_imp: "значил" } },
+            { category: "Possession", russian: "иметь", pronunciation: "[ee-MYET']", english: "to have (formal)", example_ru: "Он имеет право.", example_ru_literal: "He has right.", example_en: "He has the right.", forms: { past_m_imp: "имел" } },
+            { category: "Motion", russian: "ходить", pronunciation: "[kha-DEET']", english: "to go (on foot, multi)", example_ru: "Он ходит в школу.", example_ru_literal: "He goes to school.", example_en: "He goes to school (walks).", forms: { uni_imp_inf: "идти", uni_pf_inf: "пойти", past_m_imp: "ходил" } },
+            { category: "Motion", russian: "ездить", pronunciation: "[YEZ-deet']", english: "to go (vehicle, multi)", example_ru: "Он ездит на работу.", example_ru_literal: "He goes to work (by vehicle).", example_en: "He goes to work (by vehicle).", forms: { uni_imp_inf: "ехать", uni_pf_inf: "поехать", past_m_imp: "ездил" } },
+            { category: "Motion", russian: "бегать", pronunciation: "[BYE-gat']", english: "to run (multi)", example_ru: "Он бегает утром.", example_ru_literal: "He runs in-morning.", example_en: "He runs in the morning.", forms: { uni_imp_inf: "бежать", uni_pf_inf: "побежать", past_m_imp: "бегал" } },
+            { category: "Motion", russian: "летать", pronunciation: "[le-TAT']", english: "to fly (multi)", example_ru: "Он летает на самолёте.", example_ru_literal: "He flies on airplane.", example_en: "He flies by airplane.", forms: { uni_imp_inf: "лететь", uni_pf_inf: "полететь", past_m_imp: "летал" } },
+            { category: "Motion", russian: "плавать", pronunciation: "[PLA-vat']", english: "to swim (multi)", example_ru: "Он плавает в бассейне.", example_ru_literal: "He swims in pool.", example_en: "He swims in the pool.", forms: { uni_imp_inf: "плыть", uni_pf_inf: "поплыть", past_m_imp: "плавал" } },
+            { category: "Motion", russian: "носить", pronunciation: "[na-SEET']", english: "to carry; wear (multi)", example_ru: "Он носит очки.", example_ru_literal: "He wears glasses.", example_en: "He wears glasses.", forms: { uni_imp_inf: "нести", uni_pf_inf: "понести", past_m_imp: "носил" } },
+            { category: "Motion", russian: "возить", pronunciation: "[va-ZEET']", english: "to transport (vehicle, multi)", example_ru: "Он возит детей.", example_ru_literal: "He transports children.", example_en: "He transports children.", forms: { uni_imp_inf: "везти", uni_pf_inf: "повезти", past_m_imp: "возил" } },
+            { category: "Motion", russian: "водить", pronunciation: "[va-DEET']", english: "to lead, drive (multi)", example_ru: "Он водит машину.", example_ru_literal: "He drives car.", example_en: "He drives a car.", forms: { uni_imp_inf: "вести", uni_pf_inf: "повести", past_m_imp: "водил" } },
+            { category: "Motion", russian: "приходить", pronunciation: "[pree-kha-DEET']", english: "to arrive (on foot)", example_ru: "Он приходит домой.", example_ru_literal: "He arrives home.", example_en: "He comes home.", forms: { pf_inf: "прийти", past_m_imp: "приходил", past_m_pf: "пришёл", imp_s_pf: "приди" } },
+            { category: "Motion", russian: "приезжать", pronunciation: "[pree-yezh-ZHAT']", english: "to arrive (vehicle)", example_ru: "Он приезжает поздно.", example_ru_literal: "He arrives late.", example_en: "He arrives late.", forms: { pf_inf: "приехать", past_m_imp: "приезжал", past_m_pf: "приехал", imp_s_pf: "приезжай" } },
+            { category: "Motion", russian: "уходить", pronunciation: "[oo-kha-DEET']", english: "to leave (on foot)", example_ru: "Он уходит рано.", example_ru_literal: "He leaves early.", example_en: "He leaves early.", forms: { pf_inf: "уйти", past_m_imp: "уходил", past_m_pf: "ушёл", imp_s_pf: "уйди" } },
+            { category: "Motion", russian: "уезжать", pronunciation: "[oo-yezh-ZHAT']", english: "to leave (by vehicle)", example_ru: "Он уезжает завтра.", example_ru_literal: "He leaves tomorrow.", example_en: "He is leaving tomorrow.", forms: { pf_inf: "уехать", past_m_imp: "уезжал", past_m_pf: "уехал", imp_s_pf: "уезжай" } },
+            { category: "Motion", russian: "выходить", pronunciation: "[vi-kha-DEET']", english: "to go out, exit", example_ru: "Он выходит из дома.", example_ru_literal: "He goes-out from house.", example_en: "He goes out of the house.", forms: { pf_inf: "выйти", past_m_imp: "выходил", past_m_pf: "вышел", imp_s_pf: "выйди" } },
+            { category: "Motion", russian: "входить", pronunciation: "[fkha-DEET']", english: "to enter, go in", example_ru: "Он входит в комнату.", example_ru_literal: "He enters into room.", example_en: "He enters the room.", forms: { pf_inf: "войти", past_m_imp: "входил", past_m_pf: "вошёл", imp_s_pf: "войди" } },
+            { category: "Speech", russian: "говорить", pronunciation: "[ga-va-REET']", english: "to speak, say", example_ru: "Он говорит по-русски.", example_ru_literal: "He speaks in-Russian.", example_en: "He speaks Russian.", forms: { pf_inf: "сказать", past_m_imp: "говорил", past_m_pf: "сказал", imp_s_pf: "скажи" } },
+            { category: "Speech", russian: "разговаривать", pronunciation: "[raz-ga-VA-ree-vat']", english: "to talk, converse", example_ru: "Он разговаривает с другом.", example_ru_literal: "He talks with friend.", example_en: "He talks with a friend.", forms: { past_m_imp: "разговаривал" } }, // Perfective is usually 'поговорить' (to talk for a bit)
+            { category: "Speech", russian: "спрашивать", pronunciation: "[SPRASH-i-vat']", english: "to ask (question)", example_ru: "Он спрашивает дорогу.", example_ru_literal: "He asks way/road.", example_en: "He asks for directions.", forms: { pf_inf: "спросить", past_m_imp: "спрашивал", past_m_pf: "спросил", imp_s_pf: "спроси" } },
+            { category: "Speech", russian: "отвечать", pronunciation: "[at-ve-CHAT']", english: "to answer, reply", example_ru: "Он отвечает на вопрос.", example_ru_literal: "He answers on question.", example_en: "He answers the question.", forms: { pf_inf: "ответить", past_m_imp: "отвечал", past_m_pf: "ответил", imp_s_pf: "ответь" } },
+            { category: "Speech", russian: "просить", pronunciation: "[pra-SEET']", english: "to ask for, request", example_ru: "Он просит помощи.", example_ru_literal: "He asks-for help.", example_en: "He asks for help.", forms: { pf_inf: "попросить", past_m_imp: "просил", past_m_pf: "попросил", imp_s_pf: "попроси" } },
+            { category: "Speech", russian: "рассказывать", pronunciation: "[ras-KAH-zi-vat']", english: "to tell (a story)", example_ru: "Он рассказывает историю.", example_ru_literal: "He tells story.", example_en: "He tells a story.", forms: { pf_inf: "рассказать", past_m_imp: "рассказывал", past_m_pf: "рассказал", imp_s_pf: "расскажи" } },
+            { category: "Speech", russian: "называть", pronunciation: "[na-zi-VAT']", english: "to name, call", example_ru: "Он называет её другом.", example_ru_literal: "He calls her friend.", example_en: "He calls her a friend.", forms: { pf_inf: "назвать", past_m_imp: "называл", past_m_pf: "назвал", imp_s_pf: "назови" } },
+            { category: "Speech", russian: "обещать", pronunciation: "[a-be-SHCHAT']", english: "to promise", example_ru: "Он обещает прийти.", example_ru_literal: "He promises to-come.", example_en: "He promises to come.", forms: { pf_inf: "пообещать", past_m_imp: "обещал", past_m_pf: "пообещал", imp_s_pf: "пообещай" } },
+            { category: "Speech", russian: "предлагать", pronunciation: "[pred-la-GAT']", english: "to offer, suggest", example_ru: "Он предлагает идею.", example_ru_literal: "He offers idea.", example_en: "He offers an idea.", forms: { pf_inf: "предложить", past_m_imp: "предлагал", past_m_pf: "предложил", imp_s_pf: "предложи" } },
+            { category: "Speech", russian: "советовать", pronunciation: "[sa-VYE-ta-vat']", english: "to advise", example_ru: "Он советует почитать.", example_ru_literal: "He advises to-read.", example_en: "He advises to read.", forms: { pf_inf: "посоветовать", past_m_imp: "советовал", past_m_pf: "посоветовал", imp_s_pf: "посоветуй" } },
+            { category: "Mental Activity", russian: "думать", pronunciation: "[DOO-mat']", english: "to think", example_ru: "Он думает о будущем.", example_ru_literal: "He thinks about future.", example_en: "He thinks about the future.", forms: { pf_inf: "подумать", past_m_imp: "думал", past_m_pf: "подумал", imp_s_pf: "подумай" } },
+            { category: "Mental Activity", russian: "знать", pronunciation: "[znat']", english: "to know", example_ru: "Он знает ответ.", example_ru_literal: "He knows answer.", example_en: "He knows the answer.", forms: { pf_inf: "узнать", past_m_imp: "знал", past_m_pf: "узнал", imp_s_pf: "узнай" } },
+            { category: "Mental Activity", russian: "понимать", pronunciation: "[pa-nee-MAT']", english: "to understand", example_ru: "Он понимает задачу.", example_ru_literal: "He understands task.", example_en: "He understands the task.", forms: { pf_inf: "понять", past_m_imp: "понимал", past_m_pf: "понял", imp_s_pf: "пойми" } },
+            { category: "Mental Activity", russian: "помнить", pronunciation: "[POM-neet']", english: "to remember", example_ru: "Он помнит всё.", example_ru_literal: "He remembers everything.", example_en: "He remembers everything.", forms: { pf_inf: "запомнить", past_m_imp: "помнил", past_m_pf: "запомнил", imp_s_pf: "запомни" } },
+            { category: "Mental Activity", russian: "вспоминать", pronunciation: "[fspa-mee-NAT']", english: "to recall", example_ru: "Он вспоминает прошлое.", example_ru_literal: "He recalls past.", example_en: "He recalls the past.", forms: { pf_inf: "вспомнить", past_m_imp: "вспоминал", past_m_pf: "вспомнил", imp_s_pf: "вспомни" } },
+            { category: "Mental Activity", russian: "забывать", pronunciation: "[za-bi-VAT']", english: "to forget", example_ru: "Он забывает имена.", example_ru_literal: "He forgets names.", example_en: "He forgets names.", forms: { pf_inf: "забыть", past_m_imp: "забывал", past_m_pf: "забыл", imp_s_pf: "забудь" } },
+            { category: "Mental Activity", russian: "решать", pronunciation: "[re-SHAT']", english: "to decide, solve", example_ru: "Он решает проблему.", example_ru_literal: "He decides/solves problem.", example_en: "He solves the problem.", forms: { pf_inf: "решить", past_m_imp: "решал", past_m_pf: "решил", imp_s_pf: "реши" } },
+            { category: "Mental Activity", russian: "считать", pronunciation: "[shchee-TAT']", english: "to consider, count", example_ru: "Он считает деньги.", example_ru_literal: "He counts money.", example_en: "He counts money.", forms: { pf_inf: "посчитать/счесть", past_m_imp: "считал", past_m_pf: "посчитал/счёл", imp_s_pf: "посчитай/сочти" } },
+            { category: "Mental Activity", russian: "верить", pronunciation: "[VYE-reet']", english: "to believe", example_ru: "Он верит в успех.", example_ru_literal: "He believes in success.", example_en: "He believes in success.", forms: { pf_inf: "поверить", past_m_imp: "верил", past_m_pf: "поверил", imp_s_pf: "поверь" } },
+            { category: "Mental Activity", russian: "надеяться", pronunciation: "[na-DYE-yat'-sya]", english: "to hope", example_ru: "Он надеется на лучшее.", example_ru_literal: "He hopes for better.", example_en: "He hopes for the best.", forms: { pf_inf: "понадеяться", past_m_imp: "надеялся", past_m_pf: "понадеялся" } },
+            { category: "Mental Activity", russian: "учить", pronunciation: "[oo-CHEET']", english: "to learn; teach", example_ru: "Он учит слова.", example_ru_literal: "He learns words.", example_en: "He learns words.", forms: { pf_inf: "выучить/научить", past_m_imp: "учил", past_m_pf: "выучил/научил", imp_s_pf: "выучи/научи" } },
+            { category: "Mental Activity", russian: "учиться", pronunciation: "[oo-CHEET'-sya]", english: "to study", example_ru: "Он учится в университете.", example_ru_literal: "He studies in university.", example_en: "He studies at university.", forms: { pf_inf: "научиться", past_m_imp: "учился", past_m_pf: "научился", imp_s_pf: "научись" } },
+            { category: "Mental Activity", russian: "изучать", pronunciation: "[ee-zoo-CHAT']", english: "to study (in depth)", example_ru: "Он изучает историю.", example_ru_literal: "He studies history.", example_en: "He studies history.", forms: { pf_inf: "изучить", past_m_imp: "изучал", past_m_pf: "изучил", imp_s_pf: "изучи" } },
+            { category: "Perception", russian: "видеть", pronunciation: "[VEE-det']", english: "to see", example_ru: "Он видит птицу.", example_ru_literal: "He sees bird.", example_en: "He sees a bird.", forms: { pf_inf: "увидеть", past_m_imp: "видел", past_m_pf: "увидел", imp_s_pf: "увидь" } },
+            { category: "Perception", russian: "смотреть", pronunciation: "[sma-TRET']", english: "to look, watch", example_ru: "Он смотрит фильм.", example_ru_literal: "He watches film.", example_en: "He watches a movie.", forms: { pf_inf: "посмотреть", past_m_imp: "смотрел", past_m_pf: "посмотрел", imp_s_pf: "посмотри" } },
+            { category: "Perception", russian: "слышать", pronunciation: "[SLI-shat']", english: "to hear", example_ru: "Он слышит музыку.", example_ru_literal: "He hears music.", example_en: "He hears music.", forms: { pf_inf: "услышать", past_m_imp: "слышал", past_m_pf: "услышал", imp_s_pf: "услышь" } },
+            { category: "Perception", russian: "слушать", pronunciation: "[SLOO-shat']", english: "to listen", example_ru: "Он слушает радио.", example_ru_literal: "He listens-to radio.", example_en: "He listens to the radio.", forms: { pf_inf: "послушать", past_m_imp: "слушал", past_m_pf: "послушал", imp_s_pf: "послушай" } },
+            { category: "Perception", russian: "чувствовать", pronunciation: "[CHOOFST-va-vat']", english: "to feel", example_ru: "Он чувствует холод.", example_ru_literal: "He feels cold.", example_en: "He feels cold.", forms: { pf_inf: "почувствовать", past_m_imp: "чувствовал", past_m_pf: "почувствовал", imp_s_pf: "почувствуй" } },
+            { category: "Perception", russian: "замечать", pronunciation: "[za-me-CHAT']", english: "to notice", example_ru: "Он замечает детали.", example_ru_literal: "He notices details.", example_en: "He notices details.", forms: { pf_inf: "заметить", past_m_imp: "замечал", past_m_pf: "заметил", imp_s_pf: "заметь" } },
+            { category: "Action", russian: "делать", pronunciation: "[DYE-lat']", english: "to do, make", example_ru: "Он делает работу.", example_ru_literal: "He does work.", example_en: "He does the work.", forms: { pf_inf: "сделать", past_m_imp: "делал", past_m_pf: "сделал", imp_s_pf: "сделай" } },
+            { category: "Action", russian: "работать", pronunciation: "[ra-BO-tat']", english: "to work", example_ru: "Он работает много.", example_ru_literal: "He works much/a-lot.", example_en: "He works a lot.", forms: { pf_inf: "поработать", past_m_imp: "работал", past_m_pf: "поработал", imp_s_pf: "поработай" } },
+            { category: "Action", russian: "жить", pronunciation: "[zhit']", english: "to live", example_ru: "Он живёт в городе.", example_ru_literal: "He lives in city.", example_en: "He lives in the city.", forms: { pf_inf: "прожить", past_m_imp: "жил", past_m_pf: "прожил" } },
+            { category: "Action", russian: "сидеть", pronunciation: "[see-DET']", english: "to sit", example_ru: "Он сидит на стуле.", example_ru_literal: "He sits on chair.", example_en: "He sits on a chair.", forms: { pf_inf: "сесть", past_m_imp: "сидел", past_m_pf: "сел", imp_s_pf: "сядь" } },
+            { category: "Action", russian: "стоять", pronunciation: "[sta-YAT']", english: "to stand", example_ru: "Он стоит у окна.", example_ru_literal: "He stands by window.", example_en: "He stands by the window.", forms: { pf_inf: "постоять", past_m_imp: "стоял", past_m_pf: "постоял" } },
+            { category: "Action", russian: "лежать", pronunciation: "[le-ZHAT']", english: "to lie down", example_ru: "Он лежит на диване.", example_ru_literal: "He lies on sofa.", example_en: "He lies on the sofa.", forms: { pf_inf: "лечь", past_m_imp: "лежал", past_m_pf: "лёг", imp_s_pf: "ляг" } },
+            { category: "Action", russian: "брать", pronunciation: "[brat']", english: "to take", example_ru: "Он берёт книгу.", example_ru_literal: "He takes book.", example_en: "He takes a book.", forms: { pf_inf: "взять", past_m_imp: "брал", past_m_pf: "взял", imp_s_pf: "возьми" } },
+            { category: "Action", russian: "давать", pronunciation: "[da-VAT']", english: "to give", example_ru: "Он даёт подарок.", example_ru_literal: "He gives gift.", example_en: "He gives a gift.", forms: { pf_inf: "дать", past_m_imp: "давал", past_m_pf: "дал", imp_s_pf: "дай" } },
+            { category: "Action", russian: "получать", pronunciation: "[pa-loo-CHAT']", english: "to receive, get", example_ru: "Он получает письмо.", example_ru_literal: "He receives letter.", example_en: "He receives a letter.", forms: { pf_inf: "получить", past_m_imp: "получал", past_m_pf: "получил", imp_s_pf: "получи" } },
+            { category: "Action", russian: "писать", pronunciation: "[pee-SAT']", english: "to write", example_ru: "Он пишет статью.", example_ru_literal: "He writes article.", example_en: "He writes an article.", forms: { pf_inf: "написать", past_m_imp: "писал", past_m_pf: "написал", imp_s_pf: "напиши" } },
+            { category: "Action", russian: "читать", pronunciation: "[chee-TAT']", english: "to read", example_ru: "Он читает книгу.", example_ru_literal: "He reads book.", example_en: "He reads a book.", forms: { pf_inf: "прочитать/прочесть", past_m_imp: "читал", past_m_pf: "прочитал/прочёл", imp_s_pf: "прочитай/прочти" } },
+            { category: "Action", russian: "есть", pronunciation: "[yest']", english: "to eat", example_ru: "Он ест суп.", example_ru_literal: "He eats soup.", example_en: "He eats soup.", forms: { pf_inf: "съесть", past_m_imp: "ел", past_m_pf: "съел", imp_s_pf: "съешь" } },
+            { category: "Action", russian: "пить", pronunciation: "[peet']", english: "to drink", example_ru: "Он пьёт воду.", example_ru_literal: "He drinks water.", example_en: "He drinks water.", forms: { pf_inf: "выпить", past_m_imp: "пил", past_m_pf: "выпил", imp_s_pf: "выпей" } },
+            { category: "Action", russian: "спать", pronunciation: "[spat']", english: "to sleep", example_ru: "Он спит долго.", example_ru_literal: "He sleeps long.", example_en: "He sleeps for a long time.", forms: { pf_inf: "поспать", past_m_imp: "спал", past_m_pf: "поспал" } },
+            { category: "Action", russian: "играть", pronunciation: "[ee-GRAT']", english: "to play", example_ru: "Он играет в футбол.", example_ru_literal: "He plays in football.", example_en: "He plays football.", forms: { pf_inf: "сыграть/поиграть", past_m_imp: "играл", past_m_pf: "сыграл/поиграл", imp_s_pf: "сыграй/поиграй" } },
+            { category: "Action", russian: "петь", pronunciation: "[pet']", english: "to sing", example_ru: "Он поёт песню.", example_ru_literal: "He sings song.", example_en: "He sings a song.", forms: { pf_inf: "спеть", past_m_imp: "пел", past_m_pf: "спел", imp_s_pf: "спой" } },
+            { category: "Action", russian: "танцевать", pronunciation: "[tan-tse-VAT']", english: "to dance", example_ru: "Он танцует хорошо.", example_ru_literal: "He dances well.", example_en: "He dances well.", forms: { pf_inf: "станцевать/потанцевать", past_m_imp: "танцевал", past_m_pf: "станцевал/потанцевал" } },
+            { category: "Action", russian: "открывать", pronunciation: "[at-kri-VAT']", english: "to open", example_ru: "Он открывает дверь.", example_ru_literal: "He opens door.", example_en: "He opens the door.", forms: { pf_inf: "открыть", past_m_imp: "открывал", past_m_pf: "открыл", imp_s_pf: "открой" } },
+            { category: "Action", russian: "закрывать", pronunciation: "[za-kri-VAT']", english: "to close", example_ru: "Он закрывает окно.", example_ru_literal: "He closes window.", example_en: "He closes the window.", forms: { pf_inf: "закрыть", past_m_imp: "закрывал", past_m_pf: "закрыл", imp_s_pf: "закрой" } },
+            { category: "Action", russian: "начинать", pronunciation: "[na-chee-NAT']", english: "to begin, start", example_ru: "Он начинает проект.", example_ru_literal: "He begins project.", example_en: "He starts a project.", forms: { pf_inf: "начать", past_m_imp: "начинал", past_m_pf: "начал", imp_s_pf: "начни" } },
+            { category: "Action", russian: "заканчивать", pronunciation: "[za-KAN-chee-vat']", english: "to finish, end", example_ru: "Он заканчивает работу.", example_ru_literal: "He finishes work.", example_en: "He finishes the work.", forms: { pf_inf: "закончить", past_m_imp: "заканчивал", past_m_pf: "закончил", imp_s_pf: "закончи" } },
+            { category: "Action", russian: "продолжать", pronunciation: "[pra-dal-ZHAT']", english: "to continue", example_ru: "Он продолжает читать.", example_ru_literal: "He continues to-read.", example_en: "He continues to read.", forms: { pf_inf: "продолжить", past_m_imp: "продолжал", past_m_pf: "продолжил", imp_s_pf: "продолжи" } },
+            { category: "Action", russian: "помогать", pronunciation: "[pa-ma-GAT']", english: "to help", example_ru: "Он помогает другу.", example_ru_literal: "He helps friend.", example_en: "He helps a friend.", forms: { pf_inf: "помочь", past_m_imp: "помогал", past_m_pf: "помог", imp_s_pf: "помоги" } },
+            { category: "Action", russian: "ждать", pronunciation: "[zhdat']", english: "to wait", example_ru: "Он ждёт автобус.", example_ru_literal: "He waits-for bus.", example_en: "He waits for the bus.", forms: { pf_inf: "подождать", past_m_imp: "ждал", past_m_pf: "подождал", imp_s_pf: "подожди" } },
+            { category: "Action", russian: "искать", pronunciation: "[ees-KAT']", english: "to look for", example_ru: "Он ищет ключи.", example_ru_literal: "He looks-for keys.", example_en: "He looks for the keys.", forms: { pf_inf: "найти", past_m_imp: "искал", past_m_pf: "нашёл", imp_s_pf: "найди" } }, // Note: 'найти' can also mean 'to find'
+            { category: "Action", russian: "показывать", pronunciation: "[pa-KAH-zi-vat']", english: "to show", example_ru: "Он показывает фото.", example_ru_literal: "He shows photo.", example_en: "He shows a photo.", forms: { pf_inf: "показать", past_m_imp: "показывал", past_m_pf: "показал", imp_s_pf: "покажи" } },
+            { category: "Action", russian: "готовить", pronunciation: "[ga-TO-veet']", english: "to prepare, cook", example_ru: "Он готовит ужин.", example_ru_literal: "He prepares dinner.", example_en: "He prepares dinner.", forms: { pf_inf: "приготовить", past_m_imp: "готовил", past_m_pf: "приготовил", imp_s_pf: "приготовь" } },
+            { category: "Action", russian: "покупать", pronunciation: "[pa-koo-PAT']", english: "to buy", example_ru: "Он покупает хлеб.", example_ru_literal: "He buys bread.", example_en: "He buys bread.", forms: { pf_inf: "купить", past_m_imp: "покупал", past_m_pf: "купил", imp_s_pf: "купи" } },
+            { category: "Action", russian: "продавать", pronunciation: "[pra-da-VAT']", english: "to sell", example_ru: "Он продаёт машину.", example_ru_literal: "He sells car.", example_en: "He sells a car.", forms: { pf_inf: "продать", past_m_imp: "продавал", past_m_pf: "продал", imp_s_pf: "продай" } },
+            { category: "Action", russian: "платить", pronunciation: "[pla-TEET']", english: "to pay", example_ru: "Он платит за обед.", example_ru_literal: "He pays for lunch.", example_en: "He pays for lunch.", forms: { pf_inf: "заплатить", past_m_imp: "платил", past_m_pf: "заплатил", imp_s_pf: "заплати" } },
+            { category: "Action", russian: "строить", pronunciation: "[STRO-eet']", english: "to build", example_ru: "Он строит дом.", example_ru_literal: "He builds house.", example_en: "He builds a house.", forms: { pf_inf: "построить", past_m_imp: "строил", past_m_pf: "построил", imp_s_pf: "построй" } },
+            { category: "Action", russian: "ломать", pronunciation: "[la-MAT']", english: "to break", example_ru: "Он ломает игрушку.", example_ru_literal: "He breaks toy.", example_en: "He breaks a toy.", forms: { pf_inf: "сломать", past_m_imp: "ломал", past_m_pf: "сломал", imp_s_pf: "сломай" } },
+            { category: "Action", russian: "чистить", pronunciation: "[CHEES-teet']", english: "to clean", example_ru: "Он чистит зубы.", example_ru_literal: "He cleans teeth.", example_en: "He cleans his teeth.", forms: { pf_inf: "почистить", past_m_imp: "чистил", past_m_pf: "почистил", imp_s_pf: "почисти" } },
+            { category: "Action", russian: "мыть", pronunciation: "[mit']", english: "to wash", example_ru: "Он моет посуду.", example_ru_literal: "He washes dishes.", example_en: "He washes the dishes.", forms: { pf_inf: "помыть/вымыть", past_m_imp: "мыл", past_m_pf: "помыл/вымыл", imp_s_pf: "помой/вымой" } },
+            { category: "Modality", russian: "мочь", pronunciation: "[moch']", english: "can, to be able", example_ru: "Он может помочь.", example_ru_literal: "He can to-help.", example_en: "He can help.", forms: { pf_inf: "смочь", past_m_imp: "мог", past_m_pf: "смог" } },
+            { category: "Modality", russian: "хотеть", pronunciation: "[kha-TET']", english: "to want", example_ru: "Он хочет спать.", example_ru_literal: "He wants to-sleep.", example_en: "He wants to sleep.", forms: { pf_inf: "захотеть", past_m_imp: "хотел", past_m_pf: "захотел" } },
+            { category: "Modality", russian: "любить", pronunciation: "[lyoo-BEET']", english: "to love, like", example_ru: "Он любит музыку.", example_ru_literal: "He loves music.", example_en: "He loves music.", forms: { pf_inf: "полюбить", past_m_imp: "любил", past_m_pf: "полюбил" } },
+            { category: "Modality", russian: "нравиться", pronunciation: "[NRA-veet'-sya]", english: "to like", example_ru: "Ему нравится книга.", example_ru_literal: "To-him is-pleasing book.", example_en: "He likes the book.", forms: { pf_inf: "понравиться", past_m_imp: "нравился", past_m_pf: "понравился" } },
+            { category: "Modality", russian: "стараться", pronunciation: "[sta-RAT'-sya]", english: "to try, strive", example_ru: "Он старается учиться.", example_ru_literal: "He tries to-study.", example_en: "He tries to study.", forms: { pf_inf: "постараться", past_m_imp: "старался", past_m_pf: "постарался", imp_s_pf: "постарайся" } },
+            { category: "Modality", russian: "пытаться", pronunciation: "[pi-TAT'-sya]", english: "to attempt, try", example_ru: "Он пытается открыть.", example_ru_literal: "He attempts to-open.", example_en: "He tries to open it.", forms: { pf_inf: "попытаться", past_m_imp: "пытался", past_m_pf: "попытался", imp_s_pf: "попытайся" } },
+            { category: "Modality", russian: "должен", pronunciation: "[DOL-zhen]", english: "must, have to (adj.)", example_ru: "Он должен идти.", example_ru_literal: "He must to-go.", example_en: "He must go.", forms: {} }, // Adjective, forms are different
+            { category: "Modality", russian: "нужно", pronunciation: "[NOOZH-na]", english: "to need (adv.)", example_ru: "Ему нужно отдохнуть.", example_ru_literal: "To-him necessary to-rest.", example_en: "He needs to rest.", forms: {} }, // Adverb, not a typical verb
+            { category: "Modality", russian: "успевать", pronunciation: "[oos-pye-VAT']", english: "to have time, manage", example_ru: "Он успевает всё.", example_ru_literal: "He manages everything.", example_en: "He manages to do everything.", forms: { pf_inf: "успеть", past_m_imp: "успевал", past_m_pf: "успел", imp_s_pf: "успей" } },
+            { category: "Change & Happening", russian: "случаться", pronunciation: "[sloo-CHAT'-sya]", english: "to happen, occur", example_ru: "Это случается редко.", example_ru_literal: "This happens rarely.", example_en: "It happens rarely.", forms: { pf_inf: "случиться", past_m_imp: "случался", past_m_pf: "случился" } },
+            { category: "Change & Happening", russian: "происходить", pronunciation: "[pra-ees-kha-DEET']", english: "to take place", example_ru: "Что происходит?", example_ru_literal: "What happens?", example_en: "What is happening?", forms: { pf_inf: "произойти", past_m_imp: "происходил", past_m_pf: "произошёл" } },
+            { category: "Change & Happening", russian: "появляться", pronunciation: "[pa-yav-LYAT'-sya]", english: "to appear", example_ru: "Он появляется внезапно.", example_ru_literal: "He appears suddenly.", example_en: "He appears suddenly.", forms: { pf_inf: "появиться", past_m_imp: "появлялся", past_m_pf: "появился", imp_s_pf: "появись" } },
+            { category: "Change & Happening", russian: "изменяться", pronunciation: "[eez-me-NYAT'-sya]", english: "to change (oneself)", example_ru: "Он изменяется к лучшему.", example_ru_literal: "He changes to better.", example_en: "He is changing for the better.", forms: { pf_inf: "измениться", past_m_imp: "изменялся", past_m_pf: "изменился", imp_s_pf: "изменись" } },
+            { category: "Change & Happening", russian: "проходить", pronunciation: "[pra-kha-DEET']", english: "to pass, go by", example_ru: "Время проходит быстро.", example_ru_literal: "Time passes quickly.", example_en: "Time passes quickly.", forms: { pf_inf: "пройти", past_m_imp: "проходил", past_m_pf: "прошёл", imp_s_pf: "пройди" } },
+        ];
+
+        const categoryNav = document.getElementById('category-nav');
+        const verbGrid = document.getElementById('verb-grid');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const categories = ['All', ...new Set(verbData.map(v => v.category))];
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.textContent = category;
+                button.dataset.category = category;
+                button.className = 'nav-button px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all';
+                categoryNav.appendChild(button);
+            });
+
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderVerbs(button.dataset.category);
+                });
+            });
+
+            if (navButtons.length > 0) {
+                navButtons[0].classList.add('active');
+            }
+            renderVerbs('All');
+        });
+
+        function renderVerbs(category) {
+            verbGrid.innerHTML = '';
+            const filteredVerbs = category === 'All'
+                ? verbData
+                : verbData.filter(v => v.category === category);
+
+            filteredVerbs.forEach(verb => {
+                const card = document.createElement('div');
+                card.className = 'verb-card cursor-pointer bg-white p-4 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300';
+
+                let formsHtml = '';
+                if (verb.forms && Object.keys(verb.forms).length > 0) {
+                    formsHtml += `<div class="verb-forms mt-3 border-t border-gray-200 pt-3">`;
+                    formsHtml += `<h4 class="text-sm font-semibold text-gray-700 mb-1 verb-forms-title">Other Forms:</h4>`;
+                    formsHtml += `<ul class="list-none pl-0 text-xs space-y-1">`;
+                    if (verb.forms.pf_inf) formsHtml += `<li><strong class="font-medium form-label">Perfective Infinitive:</strong> <span class="form-value">${verb.forms.pf_inf}</span></li>`;
+                    if (verb.forms.uni_imp_inf) formsHtml += `<li><strong class="font-medium form-label">Unidir. Imperf. Inf.:</strong> <span class="form-value">${verb.forms.uni_imp_inf}</span></li>`;
+                    if (verb.forms.uni_pf_inf) formsHtml += `<li><strong class="font-medium form-label">Unidir. Perf. Inf.:</strong> <span class="form-value">${verb.forms.uni_pf_inf}</span></li>`;
+                    if (verb.forms.past_m_imp) formsHtml += `<li><strong class="font-medium form-label">Past (he, imperf.):</strong> <span class="form-value">${verb.forms.past_m_imp}</span></li>`;
+                    if (verb.forms.past_m_pf) formsHtml += `<li><strong class="font-medium form-label">Past (he, perf.):</strong> <span class="form-value">${verb.forms.past_m_pf}</span></li>`;
+                    if (verb.forms.imp_s_pf) formsHtml += `<li><strong class="font-medium form-label">Imperative (you sg, perf.):</strong> <span class="form-value">${verb.forms.imp_s_pf}</span></li>`;
+                    if (verb.forms.imp_s_imp) formsHtml += `<li><strong class="font-medium form-label">Imperative (you sg, imperf.):</strong> <span class="form-value">${verb.forms.imp_s_imp}</span></li>`;
+                    formsHtml += `</ul></div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex flex-col justify-center items-center text-center">
+                        <h3 class="text-xl font-semibold text-gray-900">${verb.russian}</h3>
+                        <p class="text-gray-500">${verb.english}</p>
+                        <div class="verb-card-details text-left w-full mt-4 border-t pt-4">
+                            <p class="text-sm"><strong class="font-medium text-gray-600">Pronunciation:</strong> <span class="text-gray-800">${verb.pronunciation}</span></p>
+                            <p class="text-sm mt-2"><strong class="font-medium text-gray-600">Example (RU):</strong> <span class="text-gray-800">${verb.example_ru}</span></p>
+                            <p class="text-sm literal-translation"><em>Literal: "${verb.example_ru_literal}"</em></p>
+                            <p class="text-sm text-gray-500 italic mb-2">Natural: "${verb.example_en}"</p>
+                            ${formsHtml}
+                        </div>
+                    </div>
+                `;
+
+                verbGrid.appendChild(card);
+
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: 90+ Russian Adjectives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        .adjective-card-details {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .adjective-card.active .adjective-card-details {
+            max-height: 550px;
+            /* Adjusted for more content */
+            margin-top: 1rem;
+        }
+
+        .nav-button.active {
+            /* Kept for potential future filter use */
+            background-color: #4A5568;
+            color: #FFFFFF;
+        }
+
+        .literal-translation {
+            color: #718096;
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+
+        .adjective-info-title {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .info-label {
+            color: #4B5563;
+        }
+
+        .info-value {
+            color: #1F2937;
+        }
+
+        .info-section {
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+        }
+
+        .example-set {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed #E5E7EB;
+        }
+
+        .example-set:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">90+ Russian Adjectives</h1>
+            <p class="mt-2 text-lg text-gray-600">An Interactive Study Guide</p>
+        </header>
+
+        <nav id="filter-nav" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
+            <!-- Filter buttons can be added here in the future if needed -->
+        </nav>
+
+        <section class="info-section p-4 rounded-lg mb-10 text-sm text-gray-700">
+            <h2 class="text-md font-semibold text-gray-800 mb-2">About Adjective Information</h2>
+            <p>When you click on an adjective card, you'll find details including:</p>
+            <ul class="list-disc list-inside mt-1 space-y-1">
+                <li><strong class="font-medium">Pronunciation:</strong> How to say the masculine form.</li>
+                <li><strong class="font-medium">Other Nominative Forms:</strong> Feminine, Neuter, and Plural (all
+                    genders).</li>
+                <li><strong class="font-medium">Example Sentences:</strong> Demonstrating agreement with masculine,
+                    feminine, neuter, and plural nouns. Each example includes literal and natural English translations.
+                </li>
+            </ul>
+            <p class="mt-2">This guide focuses on basic nominative case agreement. Russian adjectives also change for
+                other cases.</p>
+        </section>
+
+        <main id="adjective-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500">
+            <p>Click on a card to see details and examples.</p>
+        </footer>
+    </div>
+
+    <script>
+        const adjectiveData = [
+            {
+                masculine: "большой", pronunciation: "[bal'-SHOY]", english: "big, large", feminine: "большая", neuter: "большое", plural: "большие",
+                example_m_ru: "Это большой дом.", example_m_ru_literal: "This big house (M).", example_m_en: "This is a big house.",
+                example_f_ru: "Это большая книга.", example_f_ru_literal: "This big book (F).", example_f_en: "This is a big book.",
+                example_n_ru: "Это большое окно.", example_n_ru_literal: "This big window (N).", example_n_en: "This is a big window.",
+                example_pl_ru: "Это большие цветы.", example_pl_ru_literal: "These big flowers (Pl).", example_pl_en: "These are big flowers."
+            },
+            {
+                masculine: "маленький", pronunciation: "[MA-lyen'-keey]", english: "small, little", feminine: "маленькая", neuter: "маленькое", plural: "маленькие",
+                example_m_ru: "Это маленький стол.", example_m_ru_literal: "This small table (M).", example_m_en: "This is a small table.",
+                example_f_ru: "Это маленькая комната.", example_f_ru_literal: "This small room (F).", example_f_en: "This is a small room.",
+                example_n_ru: "Это маленькое яблоко.", example_n_ru_literal: "This small apple (N).", example_n_en: "This is a small apple.",
+                example_pl_ru: "Это маленькие дети.", example_pl_ru_literal: "These small children (Pl).", example_pl_en: "These are small children."
+            },
+            {
+                masculine: "хороший", pronunciation: "[kha-RO-shiy]", english: "good", feminine: "хорошая", neuter: "хорошее", plural: "хорошие",
+                example_m_ru: "Это хороший фильм.", example_m_ru_literal: "This good film (M).", example_m_en: "This is a good film.",
+                example_f_ru: "Это хорошая погода.", example_f_ru_literal: "This good weather (F).", example_f_en: "This is good weather.",
+                example_n_ru: "Это хорошее вино.", example_n_ru_literal: "This good wine (N).", example_n_en: "This is good wine.",
+                example_pl_ru: "Это хорошие новости.", example_pl_ru_literal: "These good news (Pl).", example_pl_en: "This is good news."
+            },
+            {
+                masculine: "плохой", pronunciation: "[pla-KHOY]", english: "bad", feminine: "плохая", neuter: "плохое", plural: "плохие",
+                example_m_ru: "Это плохой день.", example_m_ru_literal: "This bad day (M).", example_m_en: "This is a bad day.",
+                example_f_ru: "Это плохая идея.", example_f_ru_literal: "This bad idea (F).", example_f_en: "This is a bad idea.",
+                example_n_ru: "Это плохое настроение.", example_n_ru_literal: "This bad mood (N).", example_n_en: "This is a bad mood.",
+                example_pl_ru: "Это плохие привычки.", example_pl_ru_literal: "These bad habits (Pl).", example_pl_en: "These are bad habits."
+            },
+            {
+                masculine: "новый", pronunciation: "[NO-viy]", english: "new", feminine: "новая", neuter: "новое", plural: "новые",
+                example_m_ru: "Это новый телефон.", example_m_ru_literal: "This new telephone (M).", example_m_en: "This is a new telephone.",
+                example_f_ru: "Это новая машина.", example_f_ru_literal: "This new car (F).", example_f_en: "This is a new car.",
+                example_n_ru: "Это новое платье.", example_n_ru_literal: "This new dress (N).", example_n_en: "This is a new dress.",
+                example_pl_ru: "Это новые очки.", example_pl_ru_literal: "These new glasses (Pl).", example_pl_en: "These are new glasses."
+            },
+            {
+                masculine: "старый", pronunciation: "[STA-riy]", english: "old", feminine: "старая", neuter: "старое", plural: "старые",
+                example_m_ru: "Это старый друг.", example_m_ru_literal: "This old friend (M).", example_m_en: "This is an old friend.",
+                example_f_ru: "Это старая фотография.", example_f_ru_literal: "This old photo (F).", example_f_en: "This is an old photo.",
+                example_n_ru: "Это старое здание.", example_n_ru_literal: "This old building (N).", example_n_en: "This is an old building.",
+                example_pl_ru: "Это старые книги.", example_pl_ru_literal: "These old books (Pl).", example_pl_en: "These are old books."
+            },
+            {
+                masculine: "молодой", pronunciation: "[ma-la-DOY]", english: "young", feminine: "молодая", neuter: "молодое", plural: "молодые",
+                example_m_ru: "Это молодой человек.", example_m_ru_literal: "This young person (M).", example_m_en: "This is a young man.",
+                example_f_ru: "Это молодая женщина.", example_f_ru_literal: "This young woman (F).", example_f_en: "This is a young woman.",
+                example_n_ru: "Это молодое дерево.", example_n_ru_literal: "This young tree (N).", example_n_en: "This is a young tree.",
+                example_pl_ru: "Это молодые специалисты.", example_pl_ru_literal: "These young specialists (Pl).", example_pl_en: "These are young specialists."
+            },
+            {
+                masculine: "красивый", pronunciation: "[kra-SEE-viy]", english: "beautiful, handsome", feminine: "красивая", neuter: "красивое", plural: "красивые",
+                example_m_ru: "Это красивый город.", example_m_ru_literal: "This beautiful city (M).", example_m_en: "This is a beautiful city.",
+                example_f_ru: "Это красивая девушка.", example_f_ru_literal: "This beautiful girl (F).", example_f_en: "This is a beautiful girl.",
+                example_n_ru: "Это красивое место.", example_n_ru_literal: "This beautiful place (N).", example_n_en: "This is a beautiful place.",
+                example_pl_ru: "Это красивые картины.", example_pl_ru_literal: "These beautiful pictures (Pl).", example_pl_en: "These are beautiful pictures."
+            },
+            {
+                masculine: "русский", pronunciation: "[ROOS-keey]", english: "Russian", feminine: "русская", neuter: "русское", plural: "русские",
+                example_m_ru: "Это русский язык.", example_m_ru_literal: "This Russian language (M).", example_m_en: "This is the Russian language.",
+                example_f_ru: "Это русская культура.", example_f_ru_literal: "This Russian culture (F).", example_f_en: "This is Russian culture.",
+                example_n_ru: "Это русское искусство.", example_n_ru_literal: "This Russian art (N).", example_n_en: "This is Russian art.",
+                example_pl_ru: "Это русские традиции.", example_pl_ru_literal: "These Russian traditions (Pl).", example_pl_en: "These are Russian traditions."
+            },
+            {
+                masculine: "последний", pronunciation: "[pas-LYED-neey]", english: "last, final", feminine: "последняя", neuter: "последнее", plural: "последние",
+                example_m_ru: "Это последний шанс.", example_m_ru_literal: "This last chance (M).", example_m_en: "This is the last chance.",
+                example_f_ru: "Это последняя страница.", example_f_ru_literal: "This last page (F).", example_f_en: "This is the last page.",
+                example_n_ru: "Это последнее слово.", example_n_ru_literal: "This last word (N).", example_n_en: "This is the last word.",
+                example_pl_ru: "Это последние новости.", example_pl_ru_literal: "These last news (Pl).", example_pl_en: "This is the latest news."
+            },
+            {
+                masculine: "высокий", pronunciation: "[vi-SO-keey]", english: "high, tall", feminine: "высокая", neuter: "высокое", plural: "высокие",
+                example_m_ru: "Это высокий потолок.", example_m_ru_literal: "This high ceiling (M).", example_m_en: "This is a high ceiling.",
+                example_f_ru: "Это высокая гора.", example_f_ru_literal: "This high mountain (F).", example_f_en: "This is a high mountain.",
+                example_n_ru: "Это высокое дерево.", example_n_ru_literal: "This tall tree (N).", example_n_en: "This is a tall tree.",
+                example_pl_ru: "Это высокие цены.", example_pl_ru_literal: "These high prices (Pl).", example_pl_en: "These are high prices."
+            },
+            {
+                masculine: "низкий", pronunciation: "[NEEZ-keey]", english: "low", feminine: "низкая", neuter: "низкое", plural: "низкие",
+                example_m_ru: "Это низкий стул.", example_m_ru_literal: "This low chair (M).", example_m_en: "This is a low chair.",
+                example_f_ru: "Это низкая температура.", example_f_ru_literal: "This low temperature (F).", example_f_en: "This is a low temperature.",
+                example_n_ru: "Это низкое здание.", example_n_ru_literal: "This low building (N).", example_n_en: "This is a low building.",
+                example_pl_ru: "Это низкие облака.", example_pl_ru_literal: "These low clouds (Pl).", example_pl_en: "These are low clouds."
+            },
+            {
+                masculine: "длинный", pronunciation: "[DLEEN-niy]", english: "long", feminine: "длинная", neuter: "длинное", plural: "длинные",
+                example_m_ru: "Это длинный коридор.", example_m_ru_literal: "This long corridor (M).", example_m_en: "This is a long corridor.",
+                example_f_ru: "Это длинная река.", example_f_ru_literal: "This long river (F).", example_f_en: "This is a long river.",
+                example_n_ru: "Это длинное письмо.", example_n_ru_literal: "This long letter (N).", example_n_en: "This is a long letter.",
+                example_pl_ru: "Это длинные волосы.", example_pl_ru_literal: "These long hair (Pl).", example_pl_en: "This is long hair."
+            },
+            {
+                masculine: "короткий", pronunciation: "[ka-ROT-keey]", english: "short", feminine: "короткая", neuter: "короткое", plural: "короткие",
+                example_m_ru: "Это короткий рассказ.", example_m_ru_literal: "This short story (M).", example_m_en: "This is a short story.",
+                example_f_ru: "Это короткая юбка.", example_f_ru_literal: "This short skirt (F).", example_f_en: "This is a short skirt.",
+                example_n_ru: "Это короткое лето.", example_n_ru_literal: "This short summer (N).", example_n_en: "This is a short summer.",
+                example_pl_ru: "Это короткие дни.", example_pl_ru_literal: "These short days (Pl).", example_pl_en: "These are short days."
+            },
+            {
+                masculine: "широкий", pronunciation: "[shi-RO-keey]", english: "wide, broad", feminine: "широкая", neuter: "широкое", plural: "широкие",
+                example_m_ru: "Это широкий проспект.", example_m_ru_literal: "This wide avenue (M).", example_m_en: "This is a wide avenue.",
+                example_f_ru: "Это широкая улыбка.", example_f_ru_literal: "This wide smile (F).", example_f_en: "This is a wide smile.",
+                example_n_ru: "Это широкое поле.", example_n_ru_literal: "This wide field (N).", example_n_en: "This is a wide field.",
+                example_pl_ru: "Это широкие плечи.", example_pl_ru_literal: "These wide shoulders (Pl).", example_pl_en: "These are broad shoulders."
+            },
+            {
+                masculine: "узкий", pronunciation: "[OOZ-keey]", english: "narrow, tight", feminine: "узкая", neuter: "узкое", plural: "узкие",
+                example_m_ru: "Это узкий проход.", example_m_ru_literal: "This narrow passage (M).", example_m_en: "This is a narrow passage.",
+                example_f_ru: "Это узкая улица.", example_f_ru_literal: "This narrow street (F).", example_f_en: "This is a narrow street.",
+                example_n_ru: "Это узкое место.", example_n_ru_literal: "This narrow place (N).", example_n_en: "This is a narrow spot.",
+                example_pl_ru: "Это узкие джинсы.", example_pl_ru_literal: "These tight jeans (Pl).", example_pl_en: "These are tight jeans."
+            },
+            {
+                masculine: "дорогой", pronunciation: "[da-ra-GOY]", english: "dear; expensive", feminine: "дорогая", neuter: "дорогое", plural: "дорогие",
+                example_m_ru: "Это дорогой подарок.", example_m_ru_literal: "This expensive gift (M).", example_m_en: "This is an expensive gift.",
+                example_f_ru: "Это дорогая машина.", example_f_ru_literal: "This expensive car (F).", example_f_en: "This is an expensive car.",
+                example_n_ru: "Это дорогое удовольствие.", example_n_ru_literal: "This expensive pleasure (N).", example_n_en: "This is an expensive pleasure.",
+                example_pl_ru: "Это дорогие часы.", example_pl_ru_literal: "These expensive watches (Pl).", example_pl_en: "These are expensive watches."
+            },
+            {
+                masculine: "дешёвый", pronunciation: "[dye-SHO-viy]", english: "cheap, inexpensive", feminine: "дешёвая", neuter: "дешёвое", plural: "дешёвые",
+                example_m_ru: "Это дешёвый билет.", example_m_ru_literal: "This cheap ticket (M).", example_m_en: "This is a cheap ticket.",
+                example_f_ru: "Это дешёвая одежда.", example_f_ru_literal: "This cheap clothing (F).", example_f_en: "These are cheap clothes.",
+                example_n_ru: "Это дешёвое вино.", example_n_ru_literal: "This cheap wine (N).", example_n_en: "This is cheap wine.",
+                example_pl_ru: "Это дешёвые товары.", example_pl_ru_literal: "These cheap goods (Pl).", example_pl_en: "These are cheap goods."
+            },
+            {
+                masculine: "трудный", pronunciation: "[TROOD-niy]", english: "difficult, hard", feminine: "трудная", neuter: "трудное", plural: "трудные",
+                example_m_ru: "Это трудный вопрос.", example_m_ru_literal: "This difficult question (M).", example_m_en: "This is a difficult question.",
+                example_f_ru: "Это трудная задача.", example_f_ru_literal: "This difficult task (F).", example_f_en: "This is a difficult task.",
+                example_n_ru: "Это трудное время.", example_n_ru_literal: "This difficult time (N).", example_n_en: "This is a difficult time.",
+                example_pl_ru: "Это трудные времена.", example_pl_ru_literal: "These difficult times (Pl).", example_pl_en: "These are difficult times."
+            },
+            {
+                masculine: "лёгкий", pronunciation: "[LYOKH-keey]", english: "easy; light (weight)", feminine: "лёгкая", neuter: "лёгкое", plural: "лёгкие",
+                example_m_ru: "Это лёгкий тест.", example_m_ru_literal: "This easy test (M).", example_m_en: "This is an easy test.",
+                example_f_ru: "Это лёгкая сумка.", example_f_ru_literal: "This light bag (F).", example_f_en: "This is a light bag.",
+                example_n_ru: "Это лёгкое упражнение.", example_n_ru_literal: "This easy exercise (N).", example_n_en: "This is an easy exercise.",
+                example_pl_ru: "Это лёгкие задачи.", example_pl_ru_literal: "These easy tasks (Pl).", example_pl_en: "These are easy tasks."
+            },
+            {
+                masculine: "быстрый", pronunciation: "[BIS-triy]", english: "fast, quick", feminine: "быстрая", neuter: "быстрое", plural: "быстрые",
+                example_m_ru: "Это быстрый поезд.", example_m_ru_literal: "This fast train (M).", example_m_en: "This is a fast train.",
+                example_f_ru: "Это быстрая реакция.", example_f_ru_literal: "This quick reaction (F).", example_f_en: "This is a quick reaction.",
+                example_n_ru: "Это быстрое решение.", example_n_ru_literal: "This quick decision (N).", example_n_en: "This is a quick decision.",
+                example_pl_ru: "Это быстрые шаги.", example_pl_ru_literal: "These quick steps (Pl).", example_pl_en: "These are quick steps."
+            },
+            {
+                masculine: "медленный", pronunciation: "[MYED-lyen-niy]", english: "slow", feminine: "медленная", neuter: "медленное", plural: "медленные",
+                example_m_ru: "Это медленный процесс.", example_m_ru_literal: "This slow process (M).", example_m_en: "This is a slow process.",
+                example_f_ru: "Это медленная музыка.", example_f_ru_literal: "This slow music (F).", example_f_en: "This is slow music.",
+                example_n_ru: "Это медленное движение.", example_n_ru_literal: "This slow movement (N).", example_n_en: "This is a slow movement.",
+                example_pl_ru: "Это медленные танцы.", example_pl_ru_literal: "These slow dances (Pl).", example_pl_en: "These are slow dances."
+            },
+            {
+                masculine: "сильный", pronunciation: "[SEEL'-niy]", english: "strong, powerful", feminine: "сильная", neuter: "сильное", plural: "сильные",
+                example_m_ru: "Это сильный ветер.", example_m_ru_literal: "This strong wind (M).", example_m_en: "This is a strong wind.",
+                example_f_ru: "Это сильная женщина.", example_f_ru_literal: "This strong woman (F).", example_f_en: "This is a strong woman.",
+                example_n_ru: "Это сильное желание.", example_n_ru_literal: "This strong desire (N).", example_n_en: "This is a strong desire.",
+                example_pl_ru: "Это сильные аргументы.", example_pl_ru_literal: "These strong arguments (Pl).", example_pl_en: "These are strong arguments."
+            },
+            {
+                masculine: "слабый", pronunciation: "[SLA-biy]", english: "weak", feminine: "слабая", neuter: "слабое", plural: "слабые",
+                example_m_ru: "Это слабый сигнал.", example_m_ru_literal: "This weak signal (M).", example_m_en: "This is a weak signal.",
+                example_f_ru: "Это слабая надежда.", example_f_ru_literal: "This weak hope (F).", example_f_en: "This is a faint hope.",
+                example_n_ru: "Это слабое место.", example_n_ru_literal: "This weak spot (N).", example_n_en: "This is a weak spot.",
+                example_pl_ru: "Это слабые стороны.", example_pl_ru_literal: "These weak sides (Pl).", example_pl_en: "These are weak points."
+            },
+            {
+                masculine: "богатый", pronunciation: "[ba-GA-tiy]", english: "rich, wealthy", feminine: "богатая", neuter: "богатое", plural: "богатые",
+                example_m_ru: "Это богатый человек.", example_m_ru_literal: "This rich person (M).", example_m_en: "This is a rich person.",
+                example_f_ru: "Это богатая страна.", example_f_ru_literal: "This rich country (F).", example_f_en: "This is a rich country.",
+                example_n_ru: "Это богатое наследие.", example_n_ru_literal: "This rich heritage (N).", example_n_en: "This is a rich heritage.",
+                example_pl_ru: "Это богатые люди.", example_pl_ru_literal: "These rich people (Pl).", example_pl_en: "These are rich people."
+            },
+            {
+                masculine: "бедный", pronunciation: "[BYED-niy]", english: "poor", feminine: "бедная", neuter: "бедное", plural: "бедные",
+                example_m_ru: "Это бедный район.", example_m_ru_literal: "This poor district (M).", example_m_en: "This is a poor district.",
+                example_f_ru: "Это бедная семья.", example_f_ru_literal: "This poor family (F).", example_f_en: "This is a poor family.",
+                example_n_ru: "Это бедное воображение.", example_n_ru_literal: "This poor imagination (N).", example_n_en: "This is a poor imagination.",
+                example_pl_ru: "Это бедные студенты.", example_pl_ru_literal: "These poor students (Pl).", example_pl_en: "These are poor students."
+            },
+            {
+                masculine: "светлый", pronunciation: "[SVYET-liy]", english: "light (color), bright", feminine: "светлая", neuter: "светлое", plural: "светлые",
+                example_m_ru: "Это светлый цвет.", example_m_ru_literal: "This light color (M).", example_m_en: "This is a light color.",
+                example_f_ru: "Это светлая комната.", example_f_ru_literal: "This bright room (F).", example_f_en: "This is a bright room.",
+                example_n_ru: "Это светлое будущее.", example_n_ru_literal: "This bright future (N).", example_n_en: "This is a bright future.",
+                example_pl_ru: "Это светлые волосы.", example_pl_ru_literal: "This light hair (Pl).", example_pl_en: "This is light hair."
+            },
+            {
+                masculine: "тёмный", pronunciation: "[TYOM-niy]", english: "dark", feminine: "тёмная", neuter: "тёмное", plural: "тёмные",
+                example_m_ru: "Это тёмный лес.", example_m_ru_literal: "This dark forest (M).", example_m_en: "This is a dark forest.",
+                example_f_ru: "Это тёмная ночь.", example_f_ru_literal: "This dark night (F).", example_f_en: "This is a dark night.",
+                example_n_ru: "Это тёмное пиво.", example_n_ru_literal: "This dark beer (N).", example_n_en: "This is dark beer.",
+                example_pl_ru: "Это тёмные очки.", example_pl_ru_literal: "These dark glasses (Pl).", example_pl_en: "These are dark glasses."
+            },
+            {
+                masculine: "чистый", pronunciation: "[CHEES-tiy]", english: "clean, pure", feminine: "чистая", neuter: "чистое", plural: "чистые",
+                example_m_ru: "Это чистый воздух.", example_m_ru_literal: "This clean air (M).", example_m_en: "This is clean air.",
+                example_f_ru: "Это чистая вода.", example_f_ru_literal: "This pure water (F).", example_f_en: "This is pure water.",
+                example_n_ru: "Это чистое небо.", example_n_ru_literal: "This clear sky (N).", example_n_en: "This is a clear sky.",
+                example_pl_ru: "Это чистые руки.", example_pl_ru_literal: "These clean hands (Pl).", example_pl_en: "These are clean hands."
+            },
+            {
+                masculine: "грязный", pronunciation: "[GRYAZ-niy]", english: "dirty", feminine: "грязная", neuter: "грязное", plural: "грязные",
+                example_m_ru: "Это грязный пол.", example_m_ru_literal: "This dirty floor (M).", example_m_en: "This is a dirty floor.",
+                example_f_ru: "Это грязная посуда.", example_f_ru_literal: "This dirty dishes (F).", example_f_en: "These are dirty dishes.",
+                example_n_ru: "Это грязное бельё.", example_n_ru_literal: "This dirty laundry (N).", example_n_en: "This is dirty laundry.",
+                example_pl_ru: "Это грязные ботинки.", example_pl_ru_literal: "These dirty boots (Pl).", example_pl_en: "These are dirty boots."
+            },
+            {
+                masculine: "полный", pronunciation: "[POL-niy]", english: "full; complete", feminine: "полная", neuter: "полное", plural: "полные",
+                example_m_ru: "Это полный стакан.", example_m_ru_literal: "This full glass (M).", example_m_en: "This is a full glass.",
+                example_f_ru: "Это полная тишина.", example_f_ru_literal: "This complete silence (F).", example_f_en: "This is complete silence.",
+                example_n_ru: "Это полное собрание.", example_n_ru_literal: "This full collection (N).", example_n_en: "This is a complete collection.",
+                example_pl_ru: "Это полные залы.", example_pl_ru_literal: "These full halls (Pl).", example_pl_en: "These are full halls."
+            },
+            {
+                masculine: "пустой", pronunciation: "[poos-TOY]", english: "empty", feminine: "пустая", neuter: "пустое", plural: "пустые",
+                example_m_ru: "Это пустой карман.", example_m_ru_literal: "This empty pocket (M).", example_m_en: "This is an empty pocket.",
+                example_f_ru: "Это пустая бутылка.", example_f_ru_literal: "This empty bottle (F).", example_f_en: "This is an empty bottle.",
+                example_n_ru: "Это пустое обещание.", example_n_ru_literal: "This empty promise (N).", example_n_en: "This is an empty promise.",
+                example_pl_ru: "Это пустые слова.", example_pl_ru_literal: "These empty words (Pl).", example_pl_en: "These are empty words."
+            },
+            {
+                masculine: "главный", pronunciation: "[GLAV-niy]", english: "main, chief, principal", feminine: "главная", neuter: "главное", plural: "главные",
+                example_m_ru: "Это главный вход.", example_m_ru_literal: "This main entrance (M).", example_m_en: "This is the main entrance.",
+                example_f_ru: "Это главная роль.", example_f_ru_literal: "This main role (F).", example_f_en: "This is the main role.",
+                example_n_ru: "Это главное событие.", example_n_ru_literal: "This main event (N).", example_n_en: "This is the main event.",
+                example_pl_ru: "Это главные новости.", example_pl_ru_literal: "These main news (Pl).", example_pl_en: "This is the main news."
+            },
+            {
+                masculine: "горячий", pronunciation: "[ga-RYA-cheey]", english: "hot", feminine: "горячая", neuter: "горячее", plural: "горячие",
+                example_m_ru: "Это горячий чай.", example_m_ru_literal: "This hot tea (M).", example_m_en: "This is hot tea.",
+                example_f_ru: "Это горячая вода.", example_f_ru_literal: "This hot water (F).", example_f_en: "This is hot water.",
+                example_n_ru: "Это горячее блюдо.", example_n_ru_literal: "This hot dish (N).", example_n_en: "This is a hot dish.",
+                example_pl_ru: "Это горячие пирожки.", example_pl_ru_literal: "These hot pies (Pl).", example_pl_en: "These are hot pies."
+            },
+            {
+                masculine: "холодный", pronunciation: "[kha-LOD-niy]", english: "cold", feminine: "холодная", neuter: "холодное", plural: "холодные",
+                example_m_ru: "Это холодный напиток.", example_m_ru_literal: "This cold drink (M).", example_m_en: "This is a cold drink.",
+                example_f_ru: "Это холодная погода.", example_f_ru_literal: "This cold weather (F).", example_f_en: "This is cold weather.",
+                example_n_ru: "Это холодное утро.", example_n_ru_literal: "This cold morning (N).", example_n_en: "This is a cold morning.",
+                example_pl_ru: "Это холодные руки.", example_pl_ru_literal: "These cold hands (Pl).", example_pl_en: "These are cold hands."
+            },
+            {
+                masculine: "тёплый", pronunciation: "[TYOP-liy]", english: "warm", feminine: "тёплая", neuter: "тёплое", plural: "тёплые",
+                example_m_ru: "Это тёплый свитер.", example_m_ru_literal: "This warm sweater (M).", example_m_en: "This is a warm sweater.",
+                example_f_ru: "Это тёплая встреча.", example_f_ru_literal: "This warm meeting (F).", example_f_en: "This is a warm meeting.",
+                example_n_ru: "Это тёплое молоко.", example_n_ru_literal: "This warm milk (N).", example_n_en: "This is warm milk.",
+                example_pl_ru: "Это тёплые дни.", example_pl_ru_literal: "These warm days (Pl).", example_pl_en: "These are warm days."
+            },
+            {
+                masculine: "простой", pronunciation: "[pras-TOY]", english: "simple, easy", feminine: "простая", neuter: "простое", plural: "простые",
+                example_m_ru: "Это простой ответ.", example_m_ru_literal: "This simple answer (M).", example_m_en: "This is a simple answer.",
+                example_f_ru: "Это простая задача.", example_f_ru_literal: "This simple task (F).", example_f_en: "This is a simple task.",
+                example_n_ru: "Это простое решение.", example_n_ru_literal: "This simple solution (N).", example_n_en: "This is a simple solution.",
+                example_pl_ru: "Это простые правила.", example_pl_ru_literal: "These simple rules (Pl).", example_pl_en: "These are simple rules."
+            },
+            {
+                masculine: "сложный", pronunciation: "[SLOZH-niy]", english: "complex, complicated", feminine: "сложная", neuter: "сложное", plural: "сложные",
+                example_m_ru: "Это сложный механизм.", example_m_ru_literal: "This complex mechanism (M).", example_m_en: "This is a complex mechanism.",
+                example_f_ru: "Это сложная ситуация.", example_f_ru_literal: "This complicated situation (F).", example_f_en: "This is a complicated situation.",
+                example_n_ru: "Это сложное предложение.", example_n_ru_literal: "This complex sentence (N).", example_n_en: "This is a complex sentence.",
+                example_pl_ru: "Это сложные вычисления.", example_pl_ru_literal: "These complex calculations (Pl).", example_pl_en: "These are complex calculations."
+            },
+            {
+                masculine: "важный", pronunciation: "[VAZH-niy]", english: "important", feminine: "важная", neuter: "важное", plural: "важные",
+                example_m_ru: "Это важный документ.", example_m_ru_literal: "This important document (M).", example_m_en: "This is an important document.",
+                example_f_ru: "Это важная встреча.", example_f_ru_literal: "This important meeting (F).", example_f_en: "This is an important meeting.",
+                example_n_ru: "Это важное сообщение.", example_n_ru_literal: "This important message (N).", example_n_en: "This is an important message.",
+                example_pl_ru: "Это важные дела.", example_pl_ru_literal: "These important matters (Pl).", example_pl_en: "These are important matters."
+            },
+            {
+                masculine: "интересный", pronunciation: "[een-tye-RYES-niy]", english: "interesting", feminine: "интересная", neuter: "интересное", plural: "интересные",
+                example_m_ru: "Это интересный факт.", example_m_ru_literal: "This interesting fact (M).", example_m_en: "This is an interesting fact.",
+                example_f_ru: "Это интересная книга.", example_f_ru_literal: "This interesting book (F).", example_f_en: "This is an interesting book.",
+                example_n_ru: "Это интересное предложение.", example_n_ru_literal: "This interesting offer (N).", example_n_en: "This is an interesting offer.",
+                example_pl_ru: "Это интересные люди.", example_pl_ru_literal: "These interesting people (Pl).", example_pl_en: "These are interesting people."
+            },
+            {
+                masculine: "скучный", pronunciation: "[SKOOCH-niy]", english: "boring, dull", feminine: "скучная", neuter: "скучное", plural: "скучные",
+                example_m_ru: "Это скучный фильм.", example_m_ru_literal: "This boring film (M).", example_m_en: "This is a boring film.",
+                example_f_ru: "Это скучная лекция.", example_f_ru_literal: "This boring lecture (F).", example_f_en: "This is a boring lecture.",
+                example_n_ru: "Это скучное занятие.", example_n_ru_literal: "This boring activity (N).", example_n_en: "This is a boring activity.",
+                example_pl_ru: "Это скучные дни.", example_pl_ru_literal: "These dull days (Pl).", example_pl_en: "These are dull days."
+            },
+            {
+                masculine: "весёлый", pronunciation: "[vye-SYO-liy]", english: "cheerful, merry, fun", feminine: "весёлая", neuter: "весёлое", plural: "весёлые",
+                example_m_ru: "Это весёлый праздник.", example_m_ru_literal: "This fun holiday (M).", example_m_en: "This is a fun holiday.",
+                example_f_ru: "Это весёлая компания.", example_f_ru_literal: "This cheerful company (F).", example_f_en: "This is a cheerful company (of people).",
+                example_n_ru: "Это весёлое настроение.", example_n_ru_literal: "This cheerful mood (N).", example_n_en: "This is a cheerful mood.",
+                example_pl_ru: "Это весёлые песни.", example_pl_ru_literal: "These merry songs (Pl).", example_pl_en: "These are merry songs."
+            },
+            {
+                masculine: "серьёзный", pronunciation: "[syer'-YOZ-niy]", english: "serious", feminine: "серьёзная", neuter: "серьёзное", plural: "серьёзные",
+                example_m_ru: "Это серьёзный разговор.", example_m_ru_literal: "This serious conversation (M).", example_m_en: "This is a serious conversation.",
+                example_f_ru: "Это серьёзная проблема.", example_f_ru_literal: "This serious problem (F).", example_f_en: "This is a serious problem.",
+                example_n_ru: "Это серьёзное дело.", example_n_ru_literal: "This serious matter (N).", example_n_en: "This is a serious matter.",
+                example_pl_ru: "Это серьёзные намерения.", example_pl_ru_literal: "These serious intentions (Pl).", example_pl_en: "These are serious intentions."
+            },
+            {
+                masculine: "счастливый", pronunciation: "[shchas-LEEV-iy]", english: "happy, lucky", feminine: "счастливая", neuter: "счастливое", plural: "счастливые",
+                example_m_ru: "Это счастливый билет.", example_m_ru_literal: "This lucky ticket (M).", example_m_en: "This is a lucky ticket.",
+                example_f_ru: "Это счастливая семья.", example_f_ru_literal: "This happy family (F).", example_f_en: "This is a happy family.",
+                example_n_ru: "Это счастливое детство.", example_n_ru_literal: "This happy childhood (N).", example_n_en: "This is a happy childhood.",
+                example_pl_ru: "Это счастливые моменты.", example_pl_ru_literal: "These happy moments (Pl).", example_pl_en: "These are happy moments."
+            },
+            {
+                masculine: "грустный", pronunciation: "[GROOST-niy]", english: "sad", feminine: "грустная", neuter: "грустное", plural: "грустные",
+                example_m_ru: "Это грустный фильм.", example_m_ru_literal: "This sad film (M).", example_m_en: "This is a sad film.",
+                example_f_ru: "Это грустная история.", example_f_ru_literal: "This sad story (F).", example_f_en: "This is a sad story.",
+                example_n_ru: "Это грустное лицо.", example_n_ru_literal: "This sad face (N).", example_n_en: "This is a sad face.",
+                example_pl_ru: "Это грустные песни.", example_pl_ru_literal: "These sad songs (Pl).", example_pl_en: "These are sad songs."
+            },
+            {
+                masculine: "умный", pronunciation: "[OOM-niy]", english: "smart, clever, intelligent", feminine: "умная", neuter: "умное", plural: "умные",
+                example_m_ru: "Это умный студент.", example_m_ru_literal: "This smart student (M).", example_m_en: "This is a smart student.",
+                example_f_ru: "Это умная книга.", example_f_ru_literal: "This clever book (F).", example_f_en: "This is a clever book.",
+                example_n_ru: "Это умное решение.", example_n_ru_literal: "This intelligent solution (N).", example_n_en: "This is an intelligent solution.",
+                example_pl_ru: "Это умные дети.", example_pl_ru_literal: "These smart children (Pl).", example_pl_en: "These are smart children."
+            },
+            {
+                masculine: "глупый", pronunciation: "[GLOO-piy]", english: "stupid, foolish", feminine: "глупая", neuter: "глупое", plural: "глупые",
+                example_m_ru: "Это глупый поступок.", example_m_ru_literal: "This foolish act (M).", example_m_en: "This was a foolish act.",
+                example_f_ru: "Это глупая ошибка.", example_f_ru_literal: "This stupid mistake (F).", example_f_en: "This is a stupid mistake.",
+                example_n_ru: "Это глупое животное.", example_n_ru_literal: "This stupid animal (N).", example_n_en: "This is a stupid animal.",
+                example_pl_ru: "Это глупые вопросы.", example_pl_ru_literal: "These foolish questions (Pl).", example_pl_en: "These are foolish questions."
+            },
+            {
+                masculine: "добрый", pronunciation: "[DO-briy]", english: "kind, good-natured", feminine: "добрая", neuter: "доброе", plural: "добрые",
+                example_m_ru: "Это добрый человек.", example_m_ru_literal: "This kind person (M).", example_m_en: "This is a kind person.",
+                example_f_ru: "Это добрая душа.", example_f_ru_literal: "This kind soul (F).", example_f_en: "This is a kind soul.",
+                example_n_ru: "Это доброе дело.", example_n_ru_literal: "This good deed (N).", example_n_en: "This is a good deed.",
+                example_pl_ru: "Это добрые люди.", example_pl_ru_literal: "These kind people (Pl).", example_pl_en: "These are kind people."
+            },
+            {
+                masculine: "злой", pronunciation: "[zloy]", english: "evil, wicked, angry", feminine: "злая", neuter: "злое", plural: "злые",
+                example_m_ru: "Это злой волк.", example_m_ru_literal: "This evil wolf (M).", example_m_en: "This is an evil wolf.",
+                example_f_ru: "Это злая собака.", example_f_ru_literal: "This angry dog (F).", example_f_en: "This is an angry dog.",
+                example_n_ru: "Это злое намерение.", example_n_ru_literal: "This wicked intention (N).", example_n_en: "This is a wicked intention.",
+                example_pl_ru: "Это злые языки.", example_pl_ru_literal: "These evil tongues (Pl) (idiom for gossipers).", example_pl_en: "These are malicious gossips."
+            },
+            {
+                masculine: "красный", pronunciation: "[KRAS-niy]", english: "red", feminine: "красная", neuter: "красное", plural: "красные",
+                example_m_ru: "Это красный шар.", example_m_ru_literal: "This red ball (M).", example_m_en: "This is a red ball.",
+                example_f_ru: "Это красная роза.", example_f_ru_literal: "This red rose (F).", example_f_en: "This is a red rose.",
+                example_n_ru: "Это красное знамя.", example_n_ru_literal: "This red banner (N).", example_n_en: "This is a red banner.",
+                example_pl_ru: "Это красные яблоки.", example_pl_ru_literal: "These red apples (Pl).", example_pl_en: "These are red apples."
+            },
+            {
+                masculine: "синий", pronunciation: "[SEE-neey]", english: "dark blue", feminine: "синяя", neuter: "синее", plural: "синие",
+                example_m_ru: "Это синий карандаш.", example_m_ru_literal: "This dark-blue pencil (M).", example_m_en: "This is a dark blue pencil.",
+                example_f_ru: "Это синяя ручка.", example_f_ru_literal: "This dark-blue pen (F).", example_f_en: "This is a dark blue pen.",
+                example_n_ru: "Это синее небо.", example_n_ru_literal: "This dark-blue sky (N).", example_n_en: "This is a dark blue sky.",
+                example_pl_ru: "Это синие цветы.", example_pl_ru_literal: "These dark-blue flowers (Pl).", example_pl_en: "These are dark blue flowers."
+            },
+            {
+                masculine: "зелёный", pronunciation: "[ze-LYO-niy]", english: "green", feminine: "зелёная", neuter: "зелёное", plural: "зелёные",
+                example_m_ru: "Это зелёный лист.", example_m_ru_literal: "This green leaf (M).", example_m_en: "This is a green leaf.",
+                example_f_ru: "Это зелёная трава.", example_f_ru_literal: "This green grass (F).", example_f_en: "This is green grass.",
+                example_n_ru: "Это зелёное яблоко.", example_n_ru_literal: "This green apple (N).", example_n_en: "This is a green apple.",
+                example_pl_ru: "Это зелёные деревья.", example_pl_ru_literal: "These green trees (Pl).", example_pl_en: "These are green trees."
+            },
+            {
+                masculine: "жёлтый", pronunciation: "[ZHOL-tiy]", english: "yellow", feminine: "жёлтая", neuter: "жёлтое", plural: "жёлтые",
+                example_m_ru: "Это жёлтый банан.", example_m_ru_literal: "This yellow banana (M).", example_m_en: "This is a yellow banana.",
+                example_f_ru: "Это жёлтая машина.", example_f_ru_literal: "This yellow car (F).", example_f_en: "This is a yellow car.",
+                example_n_ru: "Это жёлтое солнце.", example_n_ru_literal: "This yellow sun (N).", example_n_en: "This is a yellow sun.",
+                example_pl_ru: "Это жёлтые листья.", example_pl_ru_literal: "These yellow leaves (Pl).", example_pl_en: "These are yellow leaves."
+            },
+            {
+                masculine: "белый", pronunciation: "[BYE-liy]", english: "white", feminine: "белая", neuter: "белое", plural: "белые",
+                example_m_ru: "Это белый снег.", example_m_ru_literal: "This white snow (M).", example_m_en: "This is white snow.",
+                example_f_ru: "Это белая бумага.", example_f_ru_literal: "This white paper (F).", example_f_en: "This is white paper.",
+                example_n_ru: "Это белое облако.", example_n_ru_literal: "This white cloud (N).", example_n_en: "This is a white cloud.",
+                example_pl_ru: "Это белые ночи.", example_pl_ru_literal: "These white nights (Pl).", example_pl_en: "These are white nights (summer twilight)."
+            },
+            {
+                masculine: "чёрный", pronunciation: "[CHOR-niy]", english: "black", feminine: "чёрная", neuter: "чёрное", plural: "чёрные",
+                example_m_ru: "Это чёрный кот.", example_m_ru_literal: "This black cat (M).", example_m_en: "This is a black cat.",
+                example_f_ru: "Это чёрная шляпа.", example_f_ru_literal: "This black hat (F).", example_f_en: "This is a black hat.",
+                example_n_ru: "Это чёрное пальто.", example_n_ru_literal: "This black coat (N).", example_n_en: "This is a black coat.",
+                example_pl_ru: "Это чёрные туфли.", example_pl_ru_literal: "These black shoes (Pl).", example_pl_en: "These are black shoes."
+            },
+            {
+                masculine: "живой", pronunciation: "[zhi-VOY]", english: "alive, living; lively", feminine: "живая", neuter: "живое", plural: "живые",
+                example_m_ru: "Это живой организм.", example_m_ru_literal: "This living organism (M).", example_m_en: "This is a living organism.",
+                example_f_ru: "Это живая музыка.", example_f_ru_literal: "This live music (F).", example_f_en: "This is live music.",
+                example_n_ru: "Это живое существо.", example_n_ru_literal: "This living creature (N).", example_n_en: "This is a living creature.",
+                example_pl_ru: "Это живые цветы.", example_pl_ru_literal: "These live flowers (Pl).", example_pl_en: "These are live flowers."
+            },
+            {
+                masculine: "мёртвый", pronunciation: "[MYORT-viy]", english: "dead", feminine: "мёртвая", neuter: "мёртвое", plural: "мёртвые",
+                example_m_ru: "Это мёртвый язык.", example_m_ru_literal: "This dead language (M).", example_m_en: "This is a dead language.",
+                example_f_ru: "Это мёртвая тишина.", example_f_ru_literal: "This dead silence (F).", example_f_en: "This is dead silence.",
+                example_n_ru: "Это мёртвое море.", example_n_ru_literal: "This dead sea (N).", example_n_en: "This is the Dead Sea.",
+                example_pl_ru: "Это мёртвые души.", example_pl_ru_literal: "These dead souls (Pl).", example_pl_en: "These are dead souls."
+            },
+            {
+                masculine: "государственный", pronunciation: "[ga-soo-DARST-vyen-niy]", english: "state, national, public", feminine: "государственная", neuter: "государственное", plural: "государственные",
+                example_m_ru: "Это государственный флаг.", example_m_ru_literal: "This state flag (M).", example_m_en: "This is the state flag.",
+                example_f_ru: "Это государственная тайна.", example_f_ru_literal: "This state secret (F).", example_f_en: "This is a state secret.",
+                example_n_ru: "Это государственное учреждение.", example_n_ru_literal: "This public institution (N).", example_n_en: "This is a public institution.",
+                example_pl_ru: "Это государственные экзамены.", example_pl_ru_literal: "These state exams (Pl).", example_pl_en: "These are state exams."
+            },
+            {
+                masculine: "частный", pronunciation: "[CHAST-niy]", english: "private", feminine: "частная", neuter: "частное", plural: "частные",
+                example_m_ru: "Это частный дом.", example_m_ru_literal: "This private house (M).", example_m_en: "This is a private house.",
+                example_f_ru: "Это частная собственность.", example_f_ru_literal: "This private property (F).", example_f_en: "This is private property.",
+                example_n_ru: "Это частное мнение.", example_n_ru_literal: "This private opinion (N).", example_n_en: "This is a private opinion.",
+                example_pl_ru: "Это частные уроки.", example_pl_ru_literal: "These private lessons (Pl).", example_pl_en: "These are private lessons."
+            },
+            {
+                masculine: "общий", pronunciation: "[OP-shcheey]", english: "common, general, shared", feminine: "общая", neuter: "общее", plural: "общие",
+                example_m_ru: "Это общий интерес.", example_m_ru_literal: "This common interest (M).", example_m_en: "This is a common interest.",
+                example_f_ru: "Это общая проблема.", example_f_ru_literal: "This common problem (F).", example_f_en: "This is a common problem.",
+                example_n_ru: "Это общее дело.", example_n_ru_literal: "This shared task/cause (N).", example_n_en: "This is a common cause.",
+                example_pl_ru: "Это общие друзья.", example_pl_ru_literal: "These shared friends (Pl).", example_pl_en: "These are mutual friends."
+            },
+            {
+                masculine: "военный", pronunciation: "[va-YEN-niy]", english: "military", feminine: "военная", neuter: "военное", plural: "военные",
+                example_m_ru: "Это военный корабль.", example_m_ru_literal: "This military ship (M).", example_m_en: "This is a military ship.",
+                example_f_ru: "Это военная тайна.", example_f_ru_literal: "This military secret (F).", example_f_en: "This is a military secret.",
+                example_n_ru: "Это военное положение.", example_n_ru_literal: "This military situation/martial law (N).", example_n_en: "This is martial law.",
+                example_pl_ru: "Это военные учения.", example_pl_ru_literal: "These military exercises (Pl).", example_pl_en: "These are military exercises."
+            },
+            {
+                masculine: "советский", pronunciation: "[sa-VYET-skeey]", english: "Soviet", feminine: "советская", neuter: "советское", plural: "советские",
+                example_m_ru: "Это советский фильм.", example_m_ru_literal: "This Soviet film (M).", example_m_en: "This is a Soviet film.",
+                example_f_ru: "Это советская эпоха.", example_f_ru_literal: "This Soviet era (F).", example_f_en: "This is the Soviet era.",
+                example_n_ru: "Это советское правительство.", example_n_ru_literal: "This Soviet government (N).", example_n_en: "This is the Soviet government.",
+                example_pl_ru: "Это советские люди.", example_pl_ru_literal: "These Soviet people (Pl).", example_pl_en: "These are Soviet people."
+            },
+            {
+                masculine: "народный", pronunciation: "[na-ROD-niy]", english: "people's, folk, national", feminine: "народная", neuter: "народное", plural: "народные",
+                example_m_ru: "Это народный артист.", example_m_ru_literal: "This people's artist (M).", example_m_en: "This is a People's Artist.",
+                example_f_ru: "Это народная мудрость.", example_f_ru_literal: "This folk wisdom (F).", example_f_en: "This is folk wisdom.",
+                example_n_ru: "Это народное творчество.", example_n_ru_literal: "This folk art (N).", example_n_en: "This is folk art.",
+                example_pl_ru: "Это народные песни.", example_pl_ru_literal: "These folk songs (Pl).", example_pl_en: "These are folk songs."
+            },
+            {
+                masculine: "научный", pronunciation: "[na-OOCH-niy]", english: "scientific", feminine: "научная", neuter: "научное", plural: "научные",
+                example_m_ru: "Это научный подход.", example_m_ru_literal: "This scientific approach (M).", example_m_en: "This is a scientific approach.",
+                example_f_ru: "Это научная статья.", example_f_ru_literal: "This scientific article (F).", example_f_en: "This is a scientific article.",
+                example_n_ru: "Это научное открытие.", example_n_ru_literal: "This scientific discovery (N).", example_n_en: "This is a scientific discovery.",
+                example_pl_ru: "Это научные исследования.", example_pl_ru_literal: "These scientific researches (Pl).", example_pl_en: "These are scientific studies."
+            },
+            {
+                masculine: "местный", pronunciation: "[MYES-niy]", english: "local", feminine: "местная", neuter: "местное", plural: "местные",
+                example_m_ru: "Это местный житель.", example_m_ru_literal: "This local resident (M).", example_m_en: "This is a local resident.",
+                example_f_ru: "Это местная газета.", example_f_ru_literal: "This local newspaper (F).", example_f_en: "This is a local newspaper.",
+                example_n_ru: "Это местное время.", example_n_ru_literal: "This local time (N).", example_n_en: "This is local time.",
+                example_pl_ru: "Это местные обычаи.", example_pl_ru_literal: "These local customs (Pl).", example_pl_en: "These are local customs."
+            },
+            {
+                masculine: "нужный", pronunciation: "[NOOZH-niy]", english: "necessary, needed", feminine: "нужная", neuter: "нужное", plural: "нужные",
+                example_m_ru: "Это нужный инструмент.", example_m_ru_literal: "This necessary tool (M).", example_m_en: "This is a necessary tool.",
+                example_f_ru: "Это нужная информация.", example_f_ru_literal: "This necessary information (F).", example_f_en: "This is necessary information.",
+                example_n_ru: "Это нужное лекарство.", example_n_ru_literal: "This needed medicine (N).", example_n_en: "This is a needed medicine.",
+                example_pl_ru: "Это нужные вещи.", example_pl_ru_literal: "These necessary things (Pl).", example_pl_en: "These are necessary things."
+            },
+            {
+                masculine: "личный", pronunciation: "[LEECH-niy]", english: "personal, private", feminine: "личная", neuter: "личное", plural: "личные",
+                example_m_ru: "Это мой личный дневник.", example_m_ru_literal: "This my personal diary (M).", example_m_en: "This is my personal diary.",
+                example_f_ru: "Это личная просьба.", example_f_ru_literal: "This personal request (F).", example_f_en: "This is a personal request.",
+                example_n_ru: "Это личное дело.", example_n_ru_literal: "This private matter (N).", example_n_en: "This is a private matter.",
+                example_pl_ru: "Это личные вещи.", example_pl_ru_literal: "These personal belongings (Pl).", example_pl_en: "These are personal belongings."
+            },
+            {
+                masculine: "основной", pronunciation: "[as-nav-NOY]", english: "basic, fundamental, main", feminine: "основная", neuter: "основное", plural: "основные",
+                example_m_ru: "Это основной принцип.", example_m_ru_literal: "This basic principle (M).", example_m_en: "This is a basic principle.",
+                example_f_ru: "Это основная идея.", example_f_ru_literal: "This main idea (F).", example_f_en: "This is the main idea.",
+                example_n_ru: "Это основное правило.", example_n_ru_literal: "This fundamental rule (N).", example_n_en: "This is a fundamental rule.",
+                example_pl_ru: "Это основные моменты.", example_pl_ru_literal: "These main points (Pl).", example_pl_en: "These are the main points."
+            },
+            {
+                masculine: "разный", pronunciation: "[RAZ-niy]", english: "different, various", feminine: "разная", neuter: "разное", plural: "разные",
+                example_m_ru: "У нас разный вкус.", example_m_ru_literal: "At-us different taste (M).", example_m_en: "We have different tastes.",
+                example_f_ru: "Это разная музыка.", example_f_ru_literal: "This different music (F).", example_f_en: "This is different music.",
+                example_n_ru: "Это разное мнение.", example_n_ru_literal: "This different opinion (N).", example_n_en: "This is a different opinion.",
+                example_pl_ru: "Это разные люди.", example_pl_ru_literal: "These different people (Pl).", example_pl_en: "These are different people."
+            },
+            {
+                masculine: "одинаковый", pronunciation: "[a-dee-NA-ka-viy]", english: "same, identical", feminine: "одинаковая", neuter: "одинаковое", plural: "одинаковые",
+                example_m_ru: "У них одинаковый цвет глаз.", example_m_ru_literal: "At-them same color of-eyes (M).", example_m_en: "They have the same eye color.",
+                example_f_ru: "У нас одинаковая машина.", example_f_ru_literal: "At-us same car (F).", example_f_en: "We have the same car.",
+                example_n_ru: "Это одинаковое платье.", example_n_ru_literal: "This identical dress (N).", example_n_en: "This is an identical dress.",
+                example_pl_ru: "У них одинаковые интересы.", example_pl_ru_literal: "At-them same interests (Pl).", example_pl_en: "They have the same interests."
+            },
+            {
+                masculine: "целый", pronunciation: "[TSE-liy]", english: "whole, entire", feminine: "целая", neuter: "целое", plural: "целые",
+                example_m_ru: "Я прочитал целый роман.", example_m_ru_literal: "I read whole novel (M).", example_m_en: "I read the whole novel.",
+                example_f_ru: "Я съел целую пиццу.", example_f_ru_literal: "I ate entire pizza (F).", example_f_en: "I ate the entire pizza.",
+                example_n_ru: "Я ждал целое утро.", example_n_ru_literal: "I waited whole morning (N).", example_n_en: "I waited the whole morning.",
+                example_pl_ru: "Мы провели там целые дни.", example_pl_ru_literal: "We spent there entire days (Pl).", example_pl_en: "We spent entire days there."
+            },
+            {
+                masculine: "будущий", pronunciation: "[BOO-doo-shcheey]", english: "future", feminine: "будущая", neuter: "будущее", plural: "будущие",
+                example_m_ru: "Это наш будущий дом.", example_m_ru_literal: "This our future house (M).", example_m_en: "This is our future house.",
+                example_f_ru: "Это моя будущая жена.", example_f_ru_literal: "This my future wife (F).", example_f_en: "This is my future wife.",
+                example_n_ru: "Это наше светлое будущее.", example_n_ru_literal: "This our bright future (N).", example_n_en: "This is our bright future.",
+                example_pl_ru: "Это будущие проекты.", example_pl_ru_literal: "These future projects (Pl).", example_pl_en: "These are future projects."
+            },
+            {
+                masculine: "прошлый", pronunciation: "[PROSH-liy]", english: "past, last", feminine: "прошлая", neuter: "прошлое", plural: "прошлые",
+                example_m_ru: "Это был прошлый год.", example_m_ru_literal: "This was last year (M).", example_m_en: "That was last year.",
+                example_f_ru: "Это прошлая неделя.", example_f_ru_literal: "This past week (F).", example_f_en: "That was last week.",
+                example_n_ru: "Это наше прошлое.", example_n_ru_literal: "This our past (N).", example_n_en: "This is our past.",
+                example_pl_ru: "Это прошлые ошибки.", example_pl_ru_literal: "These past mistakes (Pl).", example_pl_en: "These are past mistakes."
+            },
+            {
+                masculine: "настоящий", pronunciation: "[nas-ta-YA-shcheey]", english: "present, real, genuine", feminine: "настоящая", neuter: "настоящее", plural: "настоящие",
+                example_m_ru: "Это настоящий друг.", example_m_ru_literal: "This real friend (M).", example_m_en: "This is a real friend.",
+                example_f_ru: "Это настоящая любовь.", example_f_ru_literal: "This genuine love (F).", example_f_en: "This is genuine love.",
+                example_n_ru: "Это настоящее золото.", example_n_ru_literal: "This real gold (N).", example_n_en: "This is real gold.",
+                example_pl_ru: "Это настоящие проблемы.", example_pl_ru_literal: "These real problems (Pl).", example_pl_en: "These are real problems."
+            },
+            {
+                masculine: "следующий", pronunciation: "[SLYE-doo-yoo-shcheey]", english: "next, following", feminine: "следующая", neuter: "следующее", plural: "следующие",
+                example_m_ru: "Это следующий вопрос.", example_m_ru_literal: "This next question (M).", example_m_en: "This is the next question.",
+                example_f_ru: "Это следующая остановка.", example_f_ru_literal: "This next stop (F).", example_f_en: "This is the next stop.",
+                example_n_ru: "Это следующее задание.", example_n_ru_literal: "This following task (N).", example_n_en: "This is the following task.",
+                example_pl_ru: "Это следующие шаги.", example_pl_ru_literal: "These next steps (Pl).", example_pl_en: "These are the next steps."
+            },
+            {
+                masculine: "готовый", pronunciation: "[ga-TO-viy]", english: "ready, prepared", feminine: "готовая", neuter: "готовое", plural: "готовые",
+                example_m_ru: "Обед готов.", example_m_ru_literal: "Lunch (M) ready.", example_m_en: "Lunch is ready.",
+                example_f_ru: "Работа готова.", example_f_ru_literal: "Work (F) ready.", example_f_en: "The work is ready.",
+                example_n_ru: "Письмо готово.", example_n_ru_literal: "Letter (N) ready.", example_n_en: "The letter is ready.",
+                example_pl_ru: "Документы готовы.", example_pl_ru_literal: "Documents (Pl) ready.", example_pl_en: "The documents are ready."
+            },
+            {
+                masculine: "свободный", pronunciation: "[sva-BOD-niy]", english: "free, vacant", feminine: "свободная", neuter: "свободное", plural: "свободные",
+                example_m_ru: "Этот стул свободный?", example_m_ru_literal: "This chair (M) free?", example_m_en: "Is this chair free?",
+                example_f_ru: "У меня свободная минута.", example_f_ru_literal: "At-me free minute (F).", example_f_en: "I have a free minute.",
+                example_n_ru: "Это свободное место.", example_n_ru_literal: "This vacant seat (N).", example_n_en: "This is a vacant seat.",
+                example_pl_ru: "У нас свободные взгляды.", example_pl_ru_literal: "At-us free views (Pl).", example_pl_en: "We have liberal views."
+            },
+            {
+                masculine: "занятый", pronunciation: "[ZA-nya-tiy]", english: "busy, occupied", feminine: "занятая", neuter: "занятое", plural: "занятые",
+                example_m_ru: "Он очень занятый человек.", example_m_ru_literal: "He very busy person (M).", example_m_en: "He is a very busy person.",
+                example_f_ru: "Линия занята.", example_f_ru_literal: "Line (F) busy.", example_f_en: "The line is busy.",
+                example_n_ru: "Это место занято.", example_n_ru_literal: "This seat (N) occupied.", example_n_en: "This seat is occupied.",
+                example_pl_ru: "Все операторы заняты.", example_pl_ru_literal: "All operators (Pl) busy.", example_pl_en: "All operators are busy."
+            },
+            {
+                masculine: "известный", pronunciation: "[eez-VYES-niy]", english: "famous, well-known", feminine: "известная", neuter: "известное", plural: "известные",
+                example_m_ru: "Это известный актёр.", example_m_ru_literal: "This famous actor (M).", example_m_en: "This is a famous actor.",
+                example_f_ru: "Это известная песня.", example_f_ru_literal: "This well-known song (F).", example_f_en: "This is a well-known song.",
+                example_n_ru: "Это известное изречение.", example_n_ru_literal: "This famous saying (N).", example_n_en: "This is a famous saying.",
+                example_pl_ru: "Это известные факты.", example_pl_ru_literal: "These well-known facts (Pl).", example_pl_en: "These are well-known facts."
+            },
+            {
+                masculine: "обычный", pronunciation: "[a-BICH-niy]", english: "usual, ordinary, common", feminine: "обычная", neuter: "обычное", plural: "обычные",
+                example_m_ru: "Это обычный день.", example_m_ru_literal: "This usual day (M).", example_m_en: "This is a usual day.",
+                example_f_ru: "Это обычная практика.", example_f_ru_literal: "This common practice (F).", example_f_en: "This is common practice.",
+                example_n_ru: "Это обычное дело.", example_n_ru_literal: "This ordinary matter (N).", example_n_en: "This is an ordinary matter.",
+                example_pl_ru: "Это обычные люди.", example_pl_ru_literal: "These ordinary people (Pl).", example_pl_en: "These are ordinary people."
+            },
+            {
+                masculine: "особый", pronunciation: "[a-SO-biy]", english: "special, particular", feminine: "особая", neuter: "особое", plural: "особые",
+                example_m_ru: "Это особый случай.", example_m_ru_literal: "This special case (M).", example_m_en: "This is a special case.",
+                example_f_ru: "Это особая дата.", example_f_ru_literal: "This special date (F).", example_f_en: "This is a special date.",
+                example_n_ru: "Это особое внимание.", example_n_ru_literal: "This particular attention (N).", example_n_en: "This requires particular attention.",
+                example_pl_ru: "Это особые условия.", example_pl_ru_literal: "These special conditions (Pl).", example_pl_en: "These are special conditions."
+            },
+            {
+                masculine: "современный", pronunciation: "[sa-vrye-MYEN-niy]", english: "modern, contemporary", feminine: "современная", neuter: "современное", plural: "современные",
+                example_m_ru: "Это современный дизайн.", example_m_ru_literal: "This modern design (M).", example_m_en: "This is a modern design.",
+                example_f_ru: "Это современная музыка.", example_f_ru_literal: "This contemporary music (F).", example_f_en: "This is contemporary music.",
+                example_n_ru: "Это современное искусство.", example_n_ru_literal: "This modern art (N).", example_n_en: "This is modern art.",
+                example_pl_ru: "Это современные технологии.", example_pl_ru_literal: "These modern technologies (Pl).", example_pl_en: "These are modern technologies."
+            },
+            {
+                masculine: "прекрасный", pronunciation: "[prye-KRAS-niy]", english: "beautiful, wonderful, excellent", feminine: "прекрасная", neuter: "прекрасное", plural: "прекрасные",
+                example_m_ru: "Это прекрасный вид.", example_m_ru_literal: "This wonderful view (M).", example_m_en: "This is a wonderful view.",
+                example_f_ru: "Это прекрасная погода.", example_f_ru_literal: "This excellent weather (F).", example_f_en: "This is excellent weather.",
+                example_n_ru: "Это прекрасное чувство.", example_n_ru_literal: "This wonderful feeling (N).", example_n_en: "This is a wonderful feeling.",
+                example_pl_ru: "Это прекрасные цветы.", example_pl_ru_literal: "These beautiful flowers (Pl).", example_pl_en: "These are beautiful flowers."
+            },
+            {
+                masculine: "ужасный", pronunciation: "[oo-ZHAS-niy]", english: "terrible, awful", feminine: "ужасная", neuter: "ужасное", plural: "ужасные",
+                example_m_ru: "Это ужасный фильм.", example_m_ru_literal: "This terrible film (M).", example_m_en: "This is a terrible film.",
+                example_f_ru: "Это ужасная ошибка.", example_f_ru_literal: "This awful mistake (F).", example_f_en: "This is an awful mistake.",
+                example_n_ru: "Это ужасное зрелище.", example_n_ru_literal: "This terrible sight (N).", example_n_en: "This is a terrible sight.",
+                example_pl_ru: "Это ужасные условия.", example_pl_ru_literal: "These awful conditions (Pl).", example_pl_en: "These are awful conditions."
+            },
+            {
+                masculine: "удобный", pronunciation: "[oo-DOB-niy]", english: "comfortable, convenient", feminine: "удобная", neuter: "удобное", plural: "удобные",
+                example_m_ru: "Это удобный стул.", example_m_ru_literal: "This comfortable chair (M).", example_m_en: "This is a comfortable chair.",
+                example_f_ru: "Это удобная обувь.", example_f_ru_literal: "This comfortable footwear (F).", example_f_en: "These are comfortable shoes.",
+                example_n_ru: "Это удобное время.", example_n_ru_literal: "This convenient time (N).", example_n_en: "This is a convenient time.",
+                example_pl_ru: "Это удобные кресла.", example_pl_ru_literal: "These comfortable armchairs (Pl).", example_pl_en: "These are comfortable armchairs."
+            },
+            {
+                masculine: "огромный", pronunciation: "[a-GROM-niy]", english: "huge, enormous", feminine: "огромная", neuter: "огромное", plural: "огромные",
+                example_m_ru: "Это огромный успех.", example_m_ru_literal: "This huge success (M).", example_m_en: "This is a huge success.",
+                example_f_ru: "Это огромная проблема.", example_f_ru_literal: "This enormous problem (F).", example_f_en: "This is an enormous problem.",
+                example_n_ru: "Это огромное здание.", example_n_ru_literal: "This huge building (N).", example_n_en: "This is a huge building.",
+                example_pl_ru: "Это огромные потери.", example_pl_ru_literal: "These enormous losses (Pl).", example_pl_en: "These are enormous losses."
+            },
+            {
+                masculine: "далёкий", pronunciation: "[da-LYO-keey]", english: "distant, far", feminine: "далёкая", neuter: "далёкое", plural: "далёкие",
+                example_m_ru: "Это далёкий путь.", example_m_ru_literal: "This distant path (M).", example_m_en: "This is a distant path.",
+                example_f_ru: "Это далёкая страна.", example_f_ru_literal: "This far country (F).", example_f_en: "This is a far country.",
+                example_n_ru: "Это далёкое будущее.", example_n_ru_literal: "This distant future (N).", example_n_en: "This is the distant future.",
+                example_pl_ru: "Это далёкие звёзды.", example_pl_ru_literal: "These distant stars (Pl).", example_pl_en: "These are distant stars."
+            },
+            {
+                masculine: "близкий", pronunciation: "[BLEEZ-keey]", english: "near, close; close (friend)", feminine: "близкая", neuter: "близкое", plural: "близкие",
+                example_m_ru: "Это близкий друг.", example_m_ru_literal: "This close friend (M).", example_m_en: "This is a close friend.",
+                example_f_ru: "Это близкая дорога.", example_f_ru_literal: "This near road (F).", example_f_en: "This road is near.",
+                example_n_ru: "Это близкое расстояние.", example_n_ru_literal: "This close distance (N).", example_n_en: "This is a short distance.",
+                example_pl_ru: "Это близкие родственники.", example_pl_ru_literal: "These close relatives (Pl).", example_pl_en: "These are close relatives."
+            },
+            {
+                masculine: "вкусный", pronunciation: "[FKOOS-niy]", english: "tasty, delicious", feminine: "вкусная", neuter: "вкусное", plural: "вкусные",
+                example_m_ru: "Это вкусный суп.", example_m_ru_literal: "This tasty soup (M).", example_m_en: "This is tasty soup.",
+                example_f_ru: "Это вкусная пицца.", example_f_ru_literal: "This delicious pizza (F).", example_f_en: "This is delicious pizza.",
+                example_n_ru: "Это вкусное мороженое.", example_n_ru_literal: "This tasty ice-cream (N).", example_n_en: "This is tasty ice cream.",
+                example_pl_ru: "Это вкусные конфеты.", example_pl_ru_literal: "These tasty sweets (Pl).", example_pl_en: "These are tasty sweets."
+            },
+            {
+                masculine: "сладкий", pronunciation: "[SLAT-keey]", english: "sweet", feminine: "сладкая", neuter: "сладкое", plural: "сладкие",
+                example_m_ru: "Это сладкий чай.", example_m_ru_literal: "This sweet tea (M).", example_m_en: "This is sweet tea.",
+                example_f_ru: "Это сладкая конфета.", example_f_ru_literal: "This sweet candy (F).", example_f_en: "This is a sweet candy.",
+                example_n_ru: "Это сладкое яблоко.", example_n_ru_literal: "This sweet apple (N).", example_n_en: "This is a sweet apple.",
+                example_pl_ru: "Это сладкие сны.", example_pl_ru_literal: "These sweet dreams (Pl).", example_pl_en: "These are sweet dreams."
+            },
+            {
+                masculine: "кислый", pronunciation: "[KEES-liy]", english: "sour", feminine: "кислая", neuter: "кислое", plural: "кислые",
+                example_m_ru: "Это кислый лимон.", example_m_ru_literal: "This sour lemon (M).", example_m_en: "This is a sour lemon.",
+                example_f_ru: "Это кислая ягода.", example_f_ru_literal: "This sour berry (F).", example_f_en: "This is a sour berry.",
+                example_n_ru: "Это кислое молоко.", example_n_ru_literal: "This sour milk (N).", example_n_en: "This is sour milk.",
+                example_pl_ru: "Это кислые щи.", example_pl_ru_literal: "This sour cabbage soup (Pl).", example_pl_en: "This is sour cabbage soup."
+            },
+            {
+                masculine: "солёный", pronunciation: "[sa-LYO-niy]", english: "salty", feminine: "солёная", neuter: "солёное", plural: "солёные",
+                example_m_ru: "Это солёный огурец.", example_m_ru_literal: "This salty cucumber (M).", example_m_en: "This is a salty cucumber.",
+                example_f_ru: "Это солёная рыба.", example_f_ru_literal: "This salty fish (F).", example_f_en: "This is salty fish.",
+                example_n_ru: "Это солёное море.", example_n_ru_literal: "This salty sea (N).", example_n_en: "This is a salty sea.",
+                example_pl_ru: "Это солёные орешки.", example_pl_ru_literal: "These salty nuts (Pl).", example_pl_en: "These are salty nuts."
+            },
+            {
+                masculine: "горький", pronunciation: "[GOR'-keey]", english: "bitter", feminine: "горькая", neuter: "горькое", plural: "горькие",
+                example_m_ru: "Это горький шоколад.", example_m_ru_literal: "This bitter chocolate (M).", example_m_en: "This is bitter chocolate.",
+                example_f_ru: "Это горькая правда.", example_f_ru_literal: "This bitter truth (F).", example_f_en: "This is the bitter truth.",
+                example_n_ru: "Это горькое лекарство.", example_n_ru_literal: "This bitter medicine (N).", example_n_en: "This is bitter medicine.",
+                example_pl_ru: "Это горькие слёзы.", example_pl_ru_literal: "These bitter tears (Pl).", example_pl_en: "These are bitter tears."
+            }
+        ];
+
+
+        const filterNav = document.getElementById('filter-nav');
+        const adjectiveGrid = document.getElementById('adjective-grid');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAdjectives();
+        });
+
+        function renderAdjectives() {
+            adjectiveGrid.innerHTML = '';
+
+            adjectiveData.forEach(adj => {
+                const card = document.createElement('div');
+                card.className = 'adjective-card cursor-pointer bg-white p-4 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300';
+
+                let formsHtml = `<ul class="list-none pl-0 text-xs space-y-1">`;
+                formsHtml += `<li><strong class="font-medium info-label">Feminine:</strong> <span class="info-value">${adj.feminine}</span></li>`;
+                formsHtml += `<li><strong class="font-medium info-label">Neuter:</strong> <span class="info-value">${adj.neuter}</span></li>`;
+                formsHtml += `<li><strong class="font-medium info-label">Plural:</strong> <span class="info-value">${adj.plural}</span></li>`;
+                formsHtml += `</ul>`;
+
+                let examplesHtml = `<div class="mt-3 border-t border-gray-200 pt-3">`;
+                examplesHtml += `<h4 class="text-sm font-semibold text-gray-700 mb-1 adjective-info-title">Examples:</h4>`;
+
+                examplesHtml += `<div class="example-set text-xs">`;
+                examplesHtml += `<p><strong class="font-medium info-label">Masc:</strong> <span class="info-value">${adj.example_m_ru}</span></p>`;
+                examplesHtml += `<p class="literal-translation"><em>Literal: "${adj.example_m_ru_literal}"</em></p>`;
+                examplesHtml += `<p class="text-gray-500 italic">Natural: "${adj.example_m_en}"</p>`;
+                examplesHtml += `</div>`;
+
+                examplesHtml += `<div class="example-set text-xs">`;
+                examplesHtml += `<p><strong class="font-medium info-label">Fem:</strong> <span class="info-value">${adj.example_f_ru}</span></p>`;
+                examplesHtml += `<p class="literal-translation"><em>Literal: "${adj.example_f_ru_literal}"</em></p>`;
+                examplesHtml += `<p class="text-gray-500 italic">Natural: "${adj.example_f_en}"</p>`;
+                examplesHtml += `</div>`;
+
+                examplesHtml += `<div class="example-set text-xs">`;
+                examplesHtml += `<p><strong class="font-medium info-label">Neut:</strong> <span class="info-value">${adj.example_n_ru}</span></p>`;
+                examplesHtml += `<p class="literal-translation"><em>Literal: "${adj.example_n_ru_literal}"</em></p>`;
+                examplesHtml += `<p class="text-gray-500 italic">Natural: "${adj.example_n_en}"</p>`;
+                examplesHtml += `</div>`;
+
+                examplesHtml += `<div class="example-set text-xs">`;
+                examplesHtml += `<p><strong class="font-medium info-label">Pl:</strong> <span class="info-value">${adj.example_pl_ru}</span></p>`;
+                examplesHtml += `<p class="literal-translation"><em>Literal: "${adj.example_pl_ru_literal}"</em></p>`;
+                examplesHtml += `<p class="text-gray-500 italic">Natural: "${adj.example_pl_en}"</p>`;
+                examplesHtml += `</div>`;
+
+                examplesHtml += `</div>`;
+
+
+                card.innerHTML = `
+                    <div class="flex flex-col justify-center items-center text-center">
+                        <h3 class="text-xl font-semibold text-gray-900">${adj.masculine}</h3>
+                        <p class="text-gray-500">${adj.english}</p>
+                        <div class="adjective-card-details text-left w-full mt-4 border-t pt-4">
+                            <p class="text-sm"><strong class="font-medium info-label">Pronunciation (M):</strong> <span class="info-value">${adj.pronunciation}</span></p>
+                            <div class="adjective-forms mt-2 mb-2">
+                                <h4 class="text-sm font-semibold text-gray-700 mb-1 adjective-info-title">Other Nominative Forms:</h4>
+                                ${formsHtml}
+                            </div>
+                            ${examplesHtml}
+                        </div>
+                    </div>
+                `;
+
+                adjectiveGrid.appendChild(card);
+
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

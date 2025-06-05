@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: 250+ Russian Nouns</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #FDFDFB;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        .noun-card-details {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .noun-card.active .noun-card-details {
+            max-height: 300px;
+            margin-top: 1rem;
+        }
+
+        .nav-button.active {
+            background-color: #4A5568;
+            color: #FFFFFF;
+        }
+
+        .literal-translation {
+            color: #718096;
+            font-style: italic;
+            font-size: 0.8rem;
+        }
+
+        .noun-info-title {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+
+        .info-label {
+            color: #4B5563;
+        }
+
+        .info-value {
+            color: #1F2937;
+        }
+
+        .info-section {
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">250+ Russian Nouns</h1>
+            <p class="mt-2 text-lg text-gray-600">An Interactive Study Guide</p>
+        </header>
+
+        <nav id="gender-nav" class="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
+        </nav>
+
+        <section class="info-section p-4 rounded-lg mb-10 text-sm text-gray-700">
+            <h2 class="text-md font-semibold text-gray-800 mb-2">About Noun Information</h2>
+            <p>When you click on a noun card, you'll find details including:</p>
+            <ul class="list-disc list-inside mt-1 space-y-1">
+                <li><strong class="font-medium">Pronunciation:</strong> How to say the noun.</li>
+                <li><strong class="font-medium">Gender:</strong> The grammatical gender (M: Masculine, F: Feminine, N:
+                    Neuter, Pl: Plural Only).</li>
+                <li><strong class="font-medium">Nominative Plural:</strong> The plural form of the noun in the basic
+                    subject case.</li>
+                <li><strong class="font-medium">Example Sentence:</strong> Showing the noun in context.</li>
+            </ul>
+            <p class="mt-2">This selection aims to provide core grammatical information for each noun. Note that some
+                nouns may have irregular plurals or are only used in one form.</p>
+        </section>
+
+        <main id="noun-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500">
+            <p>Click on a card to see details.</p>
+        </footer>
+    </div>
+
+    <script>
+        const nounData = [
+            // Masculine Nouns (Expanded)
+            { russian: "человек", pronunciation: "[che-la-VYEK]", english: "person, man", gender: "M", plural_nom: "люди", example_ru: "Этот человек добрый.", example_ru_literal: "This person kind.", example_en: "This person is kind." },
+            { russian: "год", pronunciation: "[got]", english: "year", gender: "M", plural_nom: "годы / лет (gen.pl.)", example_ru: "Прошёл целый год.", example_ru_literal: "Passed whole year.", example_en: "A whole year has passed." },
+            { russian: "стол", pronunciation: "[stol]", english: "table", gender: "M", plural_nom: "столы", example_ru: "На столе книга.", example_ru_literal: "On table book.", example_en: "There is a book on the table." },
+            { russian: "дом", pronunciation: "[dom]", english: "house, home", gender: "M", plural_nom: "дома", example_ru: "Это мой дом.", example_ru_literal: "This my house.", example_en: "This is my house." },
+            { russian: "день", pronunciation: "[dyen']", english: "day", gender: "M", plural_nom: "дни", example_ru: "Сегодня хороший день.", example_ru_literal: "Today good day.", example_en: "Today is a good day." },
+            { russian: "друг", pronunciation: "[drook]", english: "friend (male)", gender: "M", plural_nom: "друзья", example_ru: "Мой друг здесь.", example_ru_literal: "My friend here.", example_en: "My friend is here." },
+            { russian: "город", pronunciation: "[GO-rat]", english: "city, town", gender: "M", plural_nom: "города", example_ru: "Это большой город.", example_ru_literal: "This big city.", example_en: "This is a big city." },
+            { russian: "мир", pronunciation: "[meer]", english: "world; peace", gender: "M", plural_nom: "миры", example_ru: "Мир прекрасен.", example_ru_literal: "World beautiful.", example_en: "The world is beautiful." },
+            { russian: "вопрос", pronunciation: "[va-PROS]", english: "question", gender: "M", plural_nom: "вопросы", example_ru: "У меня есть вопрос.", example_ru_literal: "At-me is question.", example_en: "I have a question." },
+            { russian: "отец", pronunciation: "[a-TYETS]", english: "father", gender: "M", plural_nom: "отцы", example_ru: "Мой отец работает.", example_ru_literal: "My father works.", example_en: "My father is working." },
+            { russian: "брат", pronunciation: "[brat]", english: "brother", gender: "M", plural_nom: "братья", example_ru: "Это мой старший брат.", example_ru_literal: "This my older brother.", example_en: "This is my older brother." },
+            { russian: "сын", pronunciation: "[sin]", english: "son", gender: "M", plural_nom: "сыновья", example_ru: "Его сын умный.", example_ru_literal: "His son smart.", example_en: "His son is smart." },
+            { russian: "вечер", pronunciation: "[VYE-cher]", english: "evening", gender: "M", plural_nom: "вечера", example_ru: "Добрый вечер!", example_ru_literal: "Good evening!", example_en: "Good evening!" },
+            { russian: "учитель", pronunciation: "[oo-CHEE-tyel']", english: "teacher (male)", gender: "M", plural_nom: "учителя", example_ru: "Он хороший учитель.", example_ru_literal: "He good teacher.", example_en: "He is a good teacher." },
+            { russian: "студент", pronunciation: "[stoo-DYENT]", english: "student (male)", gender: "M", plural_nom: "студенты", example_ru: "Этот студент прилежный.", example_ru_literal: "This student diligent.", example_en: "This student is diligent." },
+            { russian: "магазин", pronunciation: "[ma-ga-ZEEN]", english: "shop, store", gender: "M", plural_nom: "магазины", example_ru: "Я иду в магазин.", example_ru_literal: "I go to shop.", example_en: "I am going to the shop." },
+            { russian: "телефон", pronunciation: "[tye-le-FON]", english: "telephone", gender: "M", plural_nom: "телефоны", example_ru: "Мой телефон звонит.", example_ru_literal: "My telephone rings.", example_en: "My telephone is ringing." },
+            { russian: "хлеб", pronunciation: "[khlyep]", english: "bread", gender: "M", plural_nom: "хлеба (kinds of bread)", example_ru: "Купи свежий хлеб.", example_ru_literal: "Buy fresh bread.", example_en: "Buy some fresh bread." },
+            { russian: "чай", pronunciation: "[chai]", english: "tea", gender: "M", plural_nom: "чаи (kinds of tea)", example_ru: "Я люблю горячий чай.", example_ru_literal: "I love hot tea.", example_en: "I love hot tea." },
+            { russian: "кофе", pronunciation: "[KO-fye]", english: "coffee", gender: "M", plural_nom: "кофе (indeclinable)", example_ru: "Он пьёт кофе утром.", example_ru_literal: "He drinks coffee in-morning.", example_en: "He drinks coffee in the morning." },
+            { russian: "лес", pronunciation: "[lyes]", english: "forest", gender: "M", plural_nom: "леса", example_ru: "Мы гуляем в лесу.", example_ru_literal: "We walk in forest.", example_en: "We are walking in the forest." },
+            { russian: "сад", pronunciation: "[sat]", english: "garden", gender: "M", plural_nom: "сады", example_ru: "В саду растут цветы.", example_ru_literal: "In garden grow flowers.", example_en: "Flowers grow in the garden." },
+            { russian: "парк", pronunciation: "[park]", english: "park", gender: "M", plural_nom: "парки", example_ru: "Дети играют в парке.", example_ru_literal: "Children play in park.", example_en: "Children are playing in the park." },
+            { russian: "стул", pronunciation: "[stool]", english: "chair", gender: "M", plural_nom: "стулья", example_ru: "Сядь на этот стул.", example_ru_literal: "Sit on this chair.", example_en: "Sit on this chair." },
+            { russian: "пол", pronunciation: "[pol]", english: "floor", gender: "M", plural_nom: "полы", example_ru: "Книга упала на пол.", example_ru_literal: "Book fell on floor.", example_en: "The book fell on the floor." },
+            { russian: "карандаш", pronunciation: "[ka-ran-DASH]", english: "pencil", gender: "M", plural_nom: "карандаши", example_ru: "Мне нужен карандаш.", example_ru_literal: "To-me necessary pencil.", example_en: "I need a pencil." },
+            { russian: "язык", pronunciation: "[ya-ZIK]", english: "language; tongue", gender: "M", plural_nom: "языки", example_ru: "Русский язык трудный.", example_ru_literal: "Russian language difficult.", example_en: "The Russian language is difficult." },
+            { russian: "ребёнок", pronunciation: "[re-BYO-nok]", english: "child", gender: "M", plural_nom: "дети", example_ru: "Это маленький ребёнок.", example_ru_literal: "This small child.", example_en: "This is a small child." },
+            { russian: "мужчина", pronunciation: "[moosh-CHEE-na]", english: "man", gender: "M", plural_nom: "мужчины", example_ru: "Тот мужчина высокий.", example_ru_literal: "That man tall.", example_en: "That man is tall." },
+            { russian: "ответ", pronunciation: "[at-VYET]", english: "answer", gender: "M", plural_nom: "ответы", example_ru: "Дайте мне ответ.", example_ru_literal: "Give to-me answer.", example_en: "Give me an answer." },
+            { russian: "конец", pronunciation: "[ka-NYETS]", english: "end", gender: "M", plural_nom: "концы", example_ru: "Это конец фильма.", example_ru_literal: "This end of-film.", example_en: "This is the end of the film." },
+            { russian: "час", pronunciation: "[chas]", english: "hour; time (o'clock)", gender: "M", plural_nom: "часы", example_ru: "Сейчас три часа.", example_ru_literal: "Now three hours.", example_en: "It's three o'clock now." },
+            { russian: "голос", pronunciation: "[GO-las]", english: "voice", gender: "M", plural_nom: "голоса", example_ru: "У неё красивый голос.", example_ru_literal: "At-her beautiful voice.", example_en: "She has a beautiful voice." },
+            { russian: "случай", pronunciation: "[SLOO-chai]", english: "case, occasion, incident", gender: "M", plural_nom: "случаи", example_ru: "Это был интересный случай.", example_ru_literal: "This was interesting case.", example_en: "It was an interesting case." },
+            { russian: "вид", pronunciation: "[veet]", english: "appearance, look, view; kind, sort", gender: "M", plural_nom: "виды", example_ru: "Какой красивый вид!", example_ru_literal: "What beautiful view!", example_en: "What a beautiful view!" },
+            { russian: "ряд", pronunciation: "[ryat]", english: "row, line; number (of)", gender: "M", plural_nom: "ряды", example_ru: "Стулья стоят в ряд.", example_ru_literal: "Chairs stand in row.", example_en: "The chairs are in a row." },
+            { russian: "путь", pronunciation: "[poot']", english: "way, path, journey", gender: "M", plural_nom: "пути", example_ru: "Это долгий путь.", example_ru_literal: "This long way.", example_en: "It's a long way." },
+            { russian: "раз", pronunciation: "[ras]", english: "time (occasion)", gender: "M", plural_nom: "разы", example_ru: "Я видел это много раз.", example_ru_literal: "I saw this many times.", example_en: "I've seen this many times." },
+            { russian: "век", pronunciation: "[vyek]", english: "century; age", gender: "M", plural_nom: "века", example_ru: "Мы живём в 21 веке.", example_ru_literal: "We live in 21st century.", example_en: "We live in the 21st century." },
+            { russian: "взгляд", pronunciation: "[vzglyat]", english: "look, glance, view", gender: "M", plural_nom: "взгляды", example_ru: "Его взгляд был строгим.", example_ru_literal: "His look was strict.", example_en: "His look was strict." },
+            { russian: "цвет", pronunciation: "[tsv(y)et]", english: "color", gender: "M", plural_nom: "цвета", example_ru: "Какой твой любимый цвет?", example_ru_literal: "What your favorite color?", example_en: "What is your favorite color?" },
+            { russian: "народ", pronunciation: "[na-ROT]", english: "people, nation", gender: "M", plural_nom: "народы", example_ru: "Русский народ гостеприимный.", example_ru_literal: "Russian people hospitable.", example_en: "Russian people are hospitable." },
+            { russian: "закон", pronunciation: "[za-KON]", english: "law", gender: "M", plural_nom: "законы", example_ru: "Нужно соблюдать закон.", example_ru_literal: "Necessary to-observe law.", example_en: "One must observe the law." },
+            { russian: "труд", pronunciation: "[troot]", english: "labor, work, effort", gender: "M", plural_nom: "труды", example_ru: "Это был тяжёлый труд.", example_ru_literal: "This was heavy labor.", example_en: "It was hard work." },
+            { russian: "смысл", pronunciation: "[smisl]", english: "meaning, sense", gender: "M", plural_nom: "смыслы", example_ru: "В чём смысл жизни?", example_ru_literal: "In what meaning of-life?", example_en: "What is the meaning of life?" },
+            { russian: "дождь", pronunciation: "[dosht']", english: "rain", gender: "M", plural_nom: "дожди", example_ru: "Идёт сильный дождь.", example_ru_literal: "Goes strong rain.", example_en: "It's raining heavily." },
+            { russian: "снег", pronunciation: "[snyek]", english: "snow", gender: "M", plural_nom: "снега", example_ru: "Зимой выпадает много снега.", example_ru_literal: "In-winter falls much snow.", example_en: "A lot of snow falls in winter." },
+            { russian: "ветер", pronunciation: "[VYE-tyer]", english: "wind", gender: "M", plural_nom: "ветры/ветра", example_ru: "Дует сильный ветер.", example_ru_literal: "Blows strong wind.", example_en: "A strong wind is blowing." },
+            { russian: "огонь", pronunciation: "[a-GON']", english: "fire", gender: "M", plural_nom: "огни", example_ru: "В камине горит огонь.", example_ru_literal: "In fireplace burns fire.", example_en: "A fire is burning in the fireplace." },
+            { russian: "врач", pronunciation: "[vrach]", english: "doctor", gender: "M", plural_nom: "врачи", example_ru: "Он работает врачом.", example_ru_literal: "He works (as) doctor.", example_en: "He works as a doctor." },
+            { russian: "поезд", pronunciation: "[PO-yest]", english: "train", gender: "M", plural_nom: "поезда", example_ru: "Поезд прибывает вовремя.", example_ru_literal: "Train arrives on-time.", example_en: "The train is arriving on time." },
+            { russian: "самолёт", pronunciation: "[sa-ma-LYOT]", english: "airplane", gender: "M", plural_nom: "самолёты", example_ru: "Самолёт летит высоко.", example_ru_literal: "Airplane flies high.", example_en: "The airplane is flying high." },
+            { russian: "автобус", pronunciation: "[af-TO-boos]", english: "bus", gender: "M", plural_nom: "автобусы", example_ru: "Я жду автобус.", example_ru_literal: "I wait-for bus.", example_en: "I am waiting for the bus." },
+            { russian: "ключ", pronunciation: "[klyooch]", english: "key", gender: "M", plural_nom: "ключи", example_ru: "Где мои ключи?", example_ru_literal: "Where my keys?", example_en: "Where are my keys?" },
+            { russian: "билет", pronunciation: "[bee-LYET]", english: "ticket", gender: "M", plural_nom: "билеты", example_ru: "У меня есть билет в кино.", example_ru_literal: "At-me is ticket to cinema.", example_en: "I have a ticket to the cinema." },
+            { russian: "суп", pronunciation: "[soop]", english: "soup", gender: "M", plural_nom: "супы", example_ru: "Я люблю томатный суп.", example_ru_literal: "I love tomato soup.", example_en: "I love tomato soup." },
+            { russian: "сыр", pronunciation: "[sir]", english: "cheese", gender: "M", plural_nom: "сыры", example_ru: "Этот сыр очень вкусный.", example_ru_literal: "This cheese very tasty.", example_en: "This cheese is very tasty." },
+            { russian: "сок", pronunciation: "[sok]", english: "juice", gender: "M", plural_nom: "соки", example_ru: "Я пью апельсиновый сок.", example_ru_literal: "I drink orange juice.", example_en: "I drink orange juice." },
+            { russian: "рис", pronunciation: "[rees]", english: "rice", gender: "M", plural_nom: "рисы (types)", example_ru: "Я люблю рис с курицей.", example_ru_literal: "I love rice with chicken.", example_en: "I love rice with chicken." },
+            { russian: "сахар", pronunciation: "[SA-khar]", english: "sugar", gender: "M", plural_nom: "сахара (types)", example_ru: "Добавьте сахар в чай.", example_ru_literal: "Add sugar to tea.", example_en: "Add sugar to the tea." },
+            { russian: "костюм", pronunciation: "[kas-TYOOM]", english: "suit", gender: "M", plural_nom: "костюмы", example_ru: "Он носит деловой костюм.", example_ru_literal: "He wears business suit.", example_en: "He wears a business suit." },
+            { russian: "шарф", pronunciation: "[sharf]", english: "scarf", gender: "M", plural_nom: "шарфы", example_ru: "Надень тёплый шарф.", example_ru_literal: "Put-on warm scarf.", example_en: "Put on a warm scarf." },
+            { russian: "полдень", pronunciation: "[POL-dyen']", english: "noon, midday", gender: "M", plural_nom: "полдни (rare)", example_ru: "Встретимся в полдень.", example_ru_literal: "Let's-meet at noon.", example_en: "Let's meet at noon." },
+            { russian: "завтрак", pronunciation: "[ZAF-trak]", english: "breakfast", gender: "M", plural_nom: "завтраки", example_ru: "Завтрак готов.", example_ru_literal: "Breakfast ready.", example_en: "Breakfast is ready." },
+            { russian: "обед", pronunciation: "[a-BYET]", english: "lunch, dinner (midday meal)", gender: "M", plural_nom: "обеды", example_ru: "Время обеда.", example_ru_literal: "Time of-lunch.", example_en: "It's lunchtime." },
+            { russian: "ужин", pronunciation: "[OO-zhin]", english: "supper, dinner (evening meal)", gender: "M", plural_nom: "ужины", example_ru: "Что у нас на ужин?", example_ru_literal: "What at-us for supper?", example_en: "What's for supper?" },
+            { russian: "характер", pronunciation: "[kha-RAK-tyer]", english: "character, nature", gender: "M", plural_nom: "характеры", example_ru: "У него сложный характер.", example_ru_literal: "At-him complex character.", example_en: "He has a complex character." },
+            { russian: "пример", pronunciation: "[pree-MYER]", english: "example", gender: "M", plural_nom: "примеры", example_ru: "Приведите пример.", example_ru_literal: "Bring example.", example_en: "Give an example." },
+            { russian: "документ", pronunciation: "[da-koo-MYENT]", english: "document", gender: "M", plural_nom: "документы", example_ru: "Подпишите этот документ.", example_ru_literal: "Sign this document.", example_en: "Sign this document." },
+            { russian: "проект", pronunciation: "[pra-YEKT]", english: "project", gender: "M", plural_nom: "проекты", example_ru: "Мы работаем над проектом.", example_ru_literal: "We work on project.", example_en: "We are working on a project." },
+            { russian: "результат", pronunciation: "[re-zool'-TAT]", english: "result", gender: "M", plural_nom: "результаты", example_ru: "Каков результат?", example_ru_literal: "What-is result?", example_en: "What is the result?" },
+            { russian: "уровень", pronunciation: "[OO-ra-vyen']", english: "level", gender: "M", plural_nom: "уровни", example_ru: "Его уровень знаний высокий.", example_ru_literal: "His level of-knowledge high.", example_en: "His level of knowledge is high." },
+            { russian: "момент", pronunciation: "[ma-MYENT]", english: "moment", gender: "M", plural_nom: "моменты", example_ru: "Подождите один момент.", example_ru_literal: "Wait one moment.", example_en: "Wait a moment." },
+            { russian: "центр", pronunciation: "[tsentr]", english: "center", gender: "M", plural_nom: "центры", example_ru: "Магазин находится в центре.", example_ru_literal: "Shop is-located in center.", example_en: "The shop is located in the center." },
+            { russian: "образ", pronunciation: "[O-bras]", english: "image, manner, way", gender: "M", plural_nom: "образы", example_ru: "Какой у неё образ!", example_ru_literal: "What at-her image!", example_en: "What an image she has!" },
+            { russian: "порядок", pronunciation: "[pa-RYA-dok]", english: "order", gender: "M", plural_nom: "порядки", example_ru: "В комнате порядок.", example_ru_literal: "In room order.", example_en: "The room is tidy." },
+            { russian: "план", pronunciation: "[plan]", english: "plan", gender: "M", plural_nom: "планы", example_ru: "У меня есть план.", example_ru_literal: "At-me is plan.", example_en: "I have a plan." },
+            { russian: "вход", pronunciation: "[fkhot]", english: "entrance", gender: "M", plural_nom: "входы", example_ru: "Где здесь вход?", example_ru_literal: "Where here entrance?", example_en: "Where is the entrance here?" },
+            { russian: "выход", pronunciation: "[VI-khat]", english: "exit; way out", gender: "M", plural_nom: "выходы", example_ru: "Запасный выход там.", example_ru_literal: "Emergency exit there.", example_en: "The emergency exit is there." },
+            { russian: "цветóк", pronunciation: "[tsvi-TOK]", english: "flower", gender: "M", plural_nom: "цветы́", example_ru: "Этот цветок красивый.", example_ru_literal: "This flower beautiful.", example_en: "This flower is beautiful." },
+            { russian: "фильм", pronunciation: "[feel'm]", english: "film, movie", gender: "M", plural_nom: "фильмы", example_ru: "Я смотрю интересный фильм.", example_ru_literal: "I watch interesting film.", example_en: "I am watching an interesting film." },
+            { russian: "звук", pronunciation: "[zvook]", english: "sound", gender: "M", plural_nom: "звуки", example_ru: "Я слышу странный звук.", example_ru_literal: "I hear strange sound.", example_en: "I hear a strange sound." },
+            { russian: "совет", pronunciation: "[sa-VYET]", english: "advice; council", gender: "M", plural_nom: "советы", example_ru: "Дай мне совет.", example_ru_literal: "Give to-me advice.", example_en: "Give me some advice." },
+            { russian: "банк", pronunciation: "[bank]", english: "bank", gender: "M", plural_nom: "банки", example_ru: "Я иду в банк.", example_ru_literal: "I go to bank.", example_en: "I am going to the bank." },
+            { russian: "театр", pronunciation: "[tye-ATR]", english: "theater", gender: "M", plural_nom: "театры", example_ru: "Мы идём в театр вечером.", example_ru_literal: "We go to theater in-evening.", example_en: "We are going to the theater in the evening." },
+            { russian: "класс", pronunciation: "[klass]", english: "class, classroom; grade", gender: "M", plural_nom: "классы", example_ru: "Наш класс дружный.", example_ru_literal: "Our class friendly.", example_en: "Our class is friendly." },
+            { russian: "счёт", pronunciation: "[shchyot]", english: "bill, account; score", gender: "M", plural_nom: "счета", example_ru: "Принесите счёт, пожалуйста.", example_ru_literal: "Bring bill, please.", example_en: "Bring the bill, please." },
+            { russian: "автомобиль", pronunciation: "[af-ta-ma-BEEL']", english: "automobile, car", gender: "M", plural_nom: "автомобили", example_ru: "Это дорогой автомобиль.", example_ru_literal: "This expensive automobile.", example_en: "This is an expensive car." },
+            { russian: "воздух", pronunciation: "[VOZ-dookh]", english: "air", gender: "M", plural_nom: "воздухи (rare, poetic)", example_ru: "Мне нужен свежий воздух.", example_ru_literal: "To-me necessary fresh air.", example_en: "I need fresh air." },
+            { russian: "глаз", pronunciation: "[glas]", english: "eye", gender: "M", plural_nom: "глаза", example_ru: "У него голубые глаза.", example_ru_literal: "At-him blue eyes.", example_en: "He has blue eyes." },
+
+            // Feminine Nouns (Expanded)
+            { russian: "рука", pronunciation: "[roo-KA]", english: "hand, arm", gender: "F", plural_nom: "руки", example_ru: "У неё красивые руки.", example_ru_literal: "At-her beautiful hands.", example_en: "She has beautiful hands." },
+            { russian: "работа", pronunciation: "[ra-BO-ta]", english: "work, job", gender: "F", plural_nom: "работы", example_ru: "Это интересная работа.", example_ru_literal: "This interesting work.", example_en: "This is interesting work." },
+            { russian: "жизнь", pronunciation: "[zhizn']", english: "life", gender: "F", plural_nom: "жизни", example_ru: "Жизнь коротка.", example_ru_literal: "Life short.", example_en: "Life is short." },
+            { russian: "голова", pronunciation: "[ga-la-VA]", english: "head", gender: "F", plural_nom: "головы", example_ru: "У меня болит голова.", example_ru_literal: "At-me hurts head.", example_en: "I have a headache." },
+            { russian: "жена", pronunciation: "[zhe-NA]", english: "wife", gender: "F", plural_nom: "жёны", example_ru: "Его жена врач.", example_ru_literal: "His wife doctor.", example_en: "His wife is a doctor." },
+            { russian: "книга", pronunciation: "[KNEE-ga]", english: "book", gender: "F", plural_nom: "книги", example_ru: "Я читаю книгу.", example_ru_literal: "I read book.", example_en: "I am reading a book." },
+            { russian: "вода", pronunciation: "[va-DA]", english: "water", gender: "F", plural_nom: "воды (types of water)", example_ru: "Дайте стакан воды.", example_ru_literal: "Give glass of-water.", example_en: "Give me a glass of water." },
+            { russian: "земля", pronunciation: "[zeem-LYA]", english: "earth, land", gender: "F", plural_nom: "земли", example_ru: "Земля круглая.", example_ru_literal: "Earth round.", example_en: "The Earth is round." },
+            { russian: "дверь", pronunciation: "[dvyer']", english: "door", gender: "F", plural_nom: "двери", example_ru: "Открой дверь.", example_ru_literal: "Open door.", example_en: "Open the door." },
+            { russian: "ночь", pronunciation: "[noch']", english: "night", gender: "F", plural_nom: "ночи", example_ru: "Наступила ночь.", example_ru_literal: "Arrived night.", example_en: "Night has fallen." },
+            { russian: "машина", pronunciation: "[ma-SHI-na]", english: "car, machine", gender: "F", plural_nom: "машины", example_ru: "Это новая машина.", example_ru_literal: "This new car.", example_en: "This is a new car." },
+            { russian: "школа", pronunciation: "[SHKO-la]", english: "school", gender: "F", plural_nom: "школы", example_ru: "Дети идут в школу.", example_ru_literal: "Children go to school.", example_en: "Children are going to school." },
+            { russian: "мама", pronunciation: "[MA-ma]", english: "mom", gender: "F", plural_nom: "мамы", example_ru: "Моя мама дома.", example_ru_literal: "My mom at-home.", example_en: "My mom is at home." },
+            { russian: "улица", pronunciation: "[OO-lee-tsa]", english: "street", gender: "F", plural_nom: "улицы", example_ru: "На этой улице шумно.", example_ru_literal: "On this street noisy.", example_en: "It's noisy on this street." },
+            { russian: "комната", pronunciation: "[KOM-na-ta]", english: "room", gender: "F", plural_nom: "комнаты", example_ru: "Это моя комната.", example_ru_literal: "This my room.", example_en: "This is my room." },
+            { russian: "женщина", pronunciation: "[ZHEN-shchee-na]", english: "woman", gender: "F", plural_nom: "женщины", example_ru: "Эта женщина очень умная.", example_ru_literal: "This woman very smart.", example_en: "This woman is very smart." },
+            { russian: "нога", pronunciation: "[na-GA]", english: "leg, foot", gender: "F", plural_nom: "ноги", example_ru: "У меня болит нога.", example_ru_literal: "At-me hurts leg.", example_en: "My leg hurts." },
+            { russian: "сторона", pronunciation: "[sta-ra-NA]", english: "side, party", gender: "F", plural_nom: "стороны", example_ru: "На какой ты стороне?", example_ru_literal: "On which you side?", example_en: "Which side are you on?" },
+            { russian: "дорога", pronunciation: "[da-RO-ga]", english: "road, way", gender: "F", plural_nom: "дороги", example_ru: "Эта дорога ведёт в город.", example_ru_literal: "This road leads to city.", example_en: "This road leads to the city." },
+            { russian: "минута", pronunciation: "[mee-NOO-ta]", english: "minute", gender: "F", plural_nom: "минуты", example_ru: "Подожди одну минуту.", example_ru_literal: "Wait one minute.", example_en: "Wait one minute." },
+            { russian: "неделя", pronunciation: "[nye-DYE-lya]", english: "week", gender: "F", plural_nom: "недели", example_ru: "Эта неделя была трудной.", example_ru_literal: "This week was difficult.", example_en: "This week was difficult." },
+            { russian: "стена", pronunciation: "[stye-NA]", english: "wall", gender: "F", plural_nom: "стены", example_ru: "Картина висит на стене.", example_ru_literal: "Picture hangs on wall.", example_en: "The picture is hanging on the wall." },
+            { russian: "идея", pronunciation: "[ee-DYE-ya]", english: "idea", gender: "F", plural_nom: "идеи", example_ru: "У меня есть хорошая идея.", example_ru_literal: "At-me is good idea.", example_en: "I have a good idea." },
+            { russian: "цена", pronunciation: "[tse-NA]", english: "price", gender: "F", plural_nom: "цены", example_ru: "Какая цена этой книги?", example_ru_literal: "What price of-this book?", example_en: "What is the price of this book?" },
+            { russian: "песня", pronunciation: "[PYES-nya]", english: "song", gender: "F", plural_nom: "песни", example_ru: "Она поёт красивую песню.", example_ru_literal: "She sings beautiful song.", example_en: "She is singing a beautiful song." },
+            { russian: "семья", pronunciation: "[syem'-YA]", english: "family", gender: "F", plural_nom: "семьи", example_ru: "У меня большая семья.", example_ru_literal: "At-me big family.", example_en: "I have a big family." },
+            { russian: "проблема", pronunciation: "[pra-BLYE-ma]", english: "problem", gender: "F", plural_nom: "проблемы", example_ru: "Это серьёзная проблема.", example_ru_literal: "This serious problem.", example_en: "This is a serious problem." },
+            { russian: "правда", pronunciation: "[PRAV-da]", english: "truth", gender: "F", plural_nom: "правды (abstract)", example_ru: "Скажи мне правду.", example_ru_literal: "Tell to-me truth.", example_en: "Tell me the truth." },
+            { russian: "страна", pronunciation: "[stra-NA]", english: "country", gender: "F", plural_nom: "страны", example_ru: "Россия – большая страна.", example_ru_literal: "Russia big country.", example_en: "Russia is a big country." },
+            { russian: "помощь", pronunciation: "[PO-mashch']", english: "help, assistance", gender: "F", plural_nom: "помощи (types)", example_ru: "Мне нужна твоя помощь.", example_ru_literal: "To-me necessary your help.", example_en: "I need your help." },
+            { russian: "девушка", pronunciation: "[DYE-voosh-ka]", english: "girl, young woman", gender: "F", plural_nom: "девушки", example_ru: "Эта девушка очень красивая.", example_ru_literal: "This girl very beautiful.", example_en: "This girl is very beautiful." },
+            { russian: "зима", pronunciation: "[zee-MA]", english: "winter", gender: "F", plural_nom: "зимы", example_ru: "Зима уже наступила.", example_ru_literal: "Winter already arrived.", example_en: "Winter has already arrived." },
+            { russian: "весна", pronunciation: "[vyes-NA]", english: "spring", gender: "F", plural_nom: "вёсны", example_ru: "Весна – моё любимое время года.", example_ru_literal: "Spring my favorite time of-year.", example_en: "Spring is my favorite season." },
+            { russian: "осень", pronunciation: "[O-syen']", english: "autumn, fall", gender: "F", plural_nom: "осени", example_ru: "Осенью листья желтеют.", example_ru_literal: "In-autumn leaves turn-yellow.", example_en: "In autumn, the leaves turn yellow." },
+            { russian: "дочь", pronunciation: "[doch']", english: "daughter", gender: "F", plural_nom: "дочери", example_ru: "Его дочь учится в школе.", example_ru_literal: "His daughter studies in school.", example_en: "His daughter studies at school." },
+            { russian: "сестра", pronunciation: "[syes-TRA]", english: "sister", gender: "F", plural_nom: "сёстры", example_ru: "Моя сестра живёт далеко.", example_ru_literal: "My sister lives far.", example_en: "My sister lives far away." },
+            { russian: "тётя", pronunciation: "[TYO-tya]", english: "aunt", gender: "F", plural_nom: "тёти", example_ru: "Моя тётя приехала в гости.", example_ru_literal: "My aunt arrived for-visit.", example_en: "My aunt came to visit." },
+            { russian: "газета", pronunciation: "[ga-ZYE-ta]", english: "newspaper", gender: "F", plural_nom: "газеты", example_ru: "Я читаю утреннюю газету.", example_ru_literal: "I read morning newspaper.", example_en: "I am reading the morning newspaper." },
+            { russian: "бумага", pronunciation: "[boo-MA-ga]", english: "paper", gender: "F", plural_nom: "бумаги (sheets/types)", example_ru: "Дай мне лист бумаги.", example_ru_literal: "Give to-me sheet of-paper.", example_en: "Give me a sheet of paper." },
+            { russian: "одежда", pronunciation: "[a-DYEZH-da]", english: "clothes, clothing", gender: "F", plural_nom: "одежды (types)", example_ru: "Это тёплая одежда.", example_ru_literal: "This warm clothes.", example_en: "These are warm clothes." },
+            { russian: "обувь", pronunciation: "[O-boof']", english: "footwear, shoes", gender: "F", plural_nom: "обуви (types)", example_ru: "Мне нужна новая обувь.", example_ru_literal: "To-me necessary new shoes.", example_en: "I need new shoes." },
+            { russian: "погода", pronunciation: "[pa-GO-da]", english: "weather", gender: "F", plural_nom: "погоды (conditions)", example_ru: "Какая сегодня погода?", example_ru_literal: "What today weather?", example_en: "What's the weather like today?" },
+            { russian: "природа", pronunciation: "[pree-RO-da]", english: "nature", gender: "F", plural_nom: "природы (abstract)", example_ru: "Я люблю природу.", example_ru_literal: "I love nature.", example_en: "I love nature." },
+            { russian: "картина", pronunciation: "[kar-TEE-na]", english: "picture, painting", gender: "F", plural_nom: "картины", example_ru: "Эта картина очень известная.", example_ru_literal: "This picture very famous.", example_en: "This picture is very famous." },
+            { russian: "музыка", pronunciation: "[MOO-zi-ka]", english: "music", gender: "F", plural_nom: "музыки (genres)", example_ru: "Я слушаю классическую музыку.", example_ru_literal: "I listen classical music.", example_en: "I listen to classical music." },
+            { russian: "река", pronunciation: "[rye-KA]", english: "river", gender: "F", plural_nom: "реки", example_ru: "Эта река очень длинная.", example_ru_literal: "This river very long.", example_en: "This river is very long." },
+            { russian: "история", pronunciation: "[ees-TO-ree-ya]", english: "history; story", gender: "F", plural_nom: "истории", example_ru: "Он рассказал интересную историю.", example_ru_literal: "He told interesting story.", example_en: "He told an interesting story." },
+            { russian: "война", pronunciation: "[vai-NA]", english: "war", gender: "F", plural_nom: "войны", example_ru: "Война – это ужасно.", example_ru_literal: "War this terrible.", example_en: "War is terrible." },
+            { russian: "свобода", pronunciation: "[sva-BO-da]", english: "freedom, liberty", gender: "F", plural_nom: "свободы (abstract)", example_ru: "Все хотят свободы.", example_ru_literal: "All want freedom.", example_en: "Everyone wants freedom." },
+            { russian: "власть", pronunciation: "[vlast']", english: "power, authority", gender: "F", plural_nom: "власти", example_ru: "У него большая власть.", example_ru_literal: "At-him big power.", example_en: "He has great power." },
+            { russian: "любовь", pronunciation: "[lyoo-BOF']", english: "love", gender: "F", plural_nom: "любви (abstract)", example_ru: "Любовь спасёт мир.", example_ru_literal: "Love will-save world.", example_en: "Love will save the world." },
+            { russian: "надежда", pronunciation: "[na-DYEZH-da]", english: "hope", gender: "F", plural_nom: "надежды", example_ru: "Надежда умирает последней.", example_ru_literal: "Hope dies last.", example_en: "Hope dies last." },
+            { russian: "мысль", pronunciation: "[misl']", english: "thought, idea", gender: "F", plural_nom: "мысли", example_ru: "У меня появилась мысль.", example_ru_literal: "At-me appeared thought.", example_en: "An idea occurred to me." },
+            { russian: "память", pronunciation: "[PA-myat']", english: "memory", gender: "F", plural_nom: "памяти (abstract)", example_ru: "У него хорошая память.", example_ru_literal: "At-him good memory.", example_en: "He has a good memory." },
+            { russian: "часть", pronunciation: "[chast']", english: "part, share", gender: "F", plural_nom: "части", example_ru: "Это только часть проблемы.", example_ru_literal: "This only part of-problem.", example_en: "This is only part of the problem." },
+            { russian: "цель", pronunciation: "[tsel']", english: "aim, goal, target", gender: "F", plural_nom: "цели", example_ru: "Какая у тебя цель?", example_ru_literal: "What at-you goal?", example_en: "What is your goal?" },
+            { russian: "причина", pronunciation: "[pree-CHEE-na]", english: "reason, cause", gender: "F", plural_nom: "причины", example_ru: "В чём причина?", example_ru_literal: "In what reason?", example_en: "What is the reason?" },
+            { russian: "ошибка", pronunciation: "[a-SHIP-ka]", english: "mistake, error", gender: "F", plural_nom: "ошибки", example_ru: "Это была моя ошибка.", example_ru_literal: "This was my mistake.", example_en: "It was my mistake." },
+            { russian: "собака", pronunciation: "[sa-BA-ka]", english: "dog", gender: "F", plural_nom: "собаки", example_ru: "Моя собака очень умная.", example_ru_literal: "My dog very smart.", example_en: "My dog is very smart." },
+            { russian: "кошка", pronunciation: "[KOSH-ka]", english: "cat (female)", gender: "F", plural_nom: "кошки", example_ru: "Эта кошка любит спать.", example_ru_literal: "This cat loves to-sleep.", example_en: "This cat loves to sleep." },
+            { russian: "птица", pronunciation: "[PTEE-tsa]", english: "bird", gender: "F", plural_nom: "птицы", example_ru: "Птица поёт на дереве.", example_ru_literal: "Bird sings on tree.", example_en: "A bird is singing in the tree." },
+            { russian: "рыба", pronunciation: "[RI-ba]", english: "fish", gender: "F", plural_nom: "рыбы", example_ru: "Я люблю есть рыбу.", example_ru_literal: "I love to-eat fish.", example_en: "I like to eat fish." },
+            { russian: "гость", pronunciation: "[gost']", english: "guest (often masculine, but fem form exists)", gender: "M/F", plural_nom: "гости", example_ru: "У нас сегодня гости.", example_ru_literal: "At-us today guests.", example_en: "We have guests today." },
+            { russian: "почта", pronunciation: "[POCH-ta]", english: "post office; mail", gender: "F", plural_nom: "почты", example_ru: "Я иду на почту.", example_ru_literal: "I go to post-office.", example_en: "I am going to the post office." },
+            { russian: "кухня", pronunciation: "[KOOKH-nya]", english: "kitchen; cuisine", gender: "F", plural_nom: "кухни", example_ru: "Мама готовит на кухне.", example_ru_literal: "Mom cooks in kitchen.", example_en: "Mom is cooking in the kitchen." },
+            { russian: "церковь", pronunciation: "[TSER-kof']", english: "church", gender: "F", plural_nom: "церкви", example_ru: "Это старая церковь.", example_ru_literal: "This old church.", example_en: "This is an old church." },
+            { russian: "кровь", pronunciation: "[krof']", english: "blood", gender: "F", plural_nom: "крови (types)", example_ru: "У него идёт кровь.", example_ru_literal: "At-him goes blood.", example_en: "He is bleeding." },
+            { russian: "боль", pronunciation: "[bol']", english: "pain", gender: "F", plural_nom: "боли", example_ru: "Я чувствую сильную боль.", example_ru_literal: "I feel strong pain.", example_en: "I feel a strong pain." },
+            { russian: "радость", pronunciation: "[RA-dast']", english: "joy", gender: "F", plural_nom: "радости", example_ru: "Это большая радость!", example_ru_literal: "This big joy!", example_en: "This is a great joy!" },
+            { russian: "грусть", pronunciation: "[groost']", english: "sadness", gender: "F", plural_nom: "грусти (abstract)", example_ru: "Меня охватила грусть.", example_ru_literal: "Me seized sadness.", example_en: "Sadness overcame me." },
+
+            // Neuter Nouns (Expanded)
+            { russian: "время", pronunciation: "[VRYE-mya]", english: "time", gender: "N", plural_nom: "времена", example_ru: "У меня нет времени.", example_ru_literal: "At-me not time (gen.).", example_en: "I don't have time." },
+            { russian: "слово", pronunciation: "[SLO-va]", english: "word", gender: "N", plural_nom: "слова", example_ru: "Это важное слово.", example_ru_literal: "This important word.", example_en: "This is an important word." },
+            { russian: "дело", pronunciation: "[DYE-la]", english: "matter, business, affair", gender: "N", plural_nom: "дела", example_ru: "Это не моё дело.", example_ru_literal: "This not my business.", example_en: "It's not my business." },
+            { russian: "место", pronunciation: "[MYES-ta]", english: "place, seat", gender: "N", plural_nom: "места", example_ru: "Это хорошее место.", example_ru_literal: "This good place.", example_en: "This is a good place." },
+            { russian: "лицо", pronunciation: "[lee-TSO]", english: "face; person (formal)", gender: "N", plural_nom: "лица", example_ru: "У неё доброе лицо.", example_ru_literal: "At-her kind face.", example_en: "She has a kind face." },
+            { russian: "окно", pronunciation: "[ak-NO]", english: "window", gender: "N", plural_nom: "окна", example_ru: "Окно открыто.", example_ru_literal: "Window open.", example_en: "The window is open." },
+            { russian: "солнце", pronunciation: "[SON-tsye]", english: "sun", gender: "N", plural_nom: "солнца (poetic)", example_ru: "Солнце светит ярко.", example_ru_literal: "Sun shines brightly.", example_en: "The sun is shining brightly." },
+            { russian: "утро", pronunciation: "[OO-tra]", english: "morning", gender: "N", plural_nom: "утры (rare)", example_ru: "Доброе утро!", example_ru_literal: "Good morning!", example_en: "Good morning!" },
+            { russian: "письмо", pronunciation: "[pees'-MO]", english: "letter (mail)", gender: "N", plural_nom: "письма", example_ru: "Я получил письмо.", example_ru_literal: "I received letter.", example_en: "I received a letter." },
+            { russian: "сердце", pronunciation: "[SYERT-se]", english: "heart", gender: "N", plural_nom: "сердца", example_ru: "У него большое сердце.", example_ru_literal: "At-him big heart.", example_en: "He has a big heart." },
+            { russian: "море", pronunciation: "[MO-rye]", english: "sea", gender: "N", plural_nom: "моря", example_ru: "Мы едем на море.", example_ru_literal: "We go to sea.", example_en: "We are going to the sea." },
+            { russian: "имя", pronunciation: "[EE-mya]", english: "name (first name)", gender: "N", plural_nom: "имена", example_ru: "Как твоё имя?", example_ru_literal: "How your name?", example_en: "What is your name?" },
+            { russian: "здание", pronunciation: "[ZDA-nee-ye]", english: "building", gender: "N", plural_nom: "здания", example_ru: "Это высокое здание.", example_ru_literal: "This tall building.", example_en: "This is a tall building." },
+            { russian: "чувство", pronunciation: "[CHOOFST-va]", english: "feeling, sense", gender: "N", plural_nom: "чувства", example_ru: "У меня странное чувство.", example_ru_literal: "At-me strange feeling.", example_en: "I have a strange feeling." },
+            { russian: "решение", pronunciation: "[re-SHYE-nee-ye]", english: "decision, solution", gender: "N", plural_nom: "решения", example_ru: "Это правильное решение.", example_ru_literal: "This correct decision.", example_en: "This is the correct decision." },
+            { russian: "правительство", pronunciation: "[pra-VEE-tyel'-stva]", english: "government", gender: "N", plural_nom: "правительства", example_ru: "Правительство приняло закон.", example_ru_literal: "Government accepted law.", example_en: "The government passed a law." },
+            { russian: "государство", pronunciation: "[ga-soo-DARST-va]", english: "state, country", gender: "N", plural_nom: "государства", example_ru: "Это сильное государство.", example_ru_literal: "This strong state.", example_en: "This is a strong state." },
+            { russian: "общество", pronunciation: "[OP-shches-tva]", english: "society", gender: "N", plural_nom: "общества", example_ru: "Современное общество изменилось.", example_ru_literal: "Modern society changed.", example_en: "Modern society has changed." },
+            { russian: "искусство", pronunciation: "[ees-KOOS-stva]", english: "art", gender: "N", plural_nom: "искусства", example_ru: "Я люблю русское искусство.", example_ru_literal: "I love Russian art.", example_en: "I love Russian art." },
+            { russian: "образование", pronunciation: "[ab-ra-za-VA-nee-ye]", english: "education", gender: "N", plural_nom: "образования", example_ru: "Он получил хорошее образование.", example_ru_literal: "He received good education.", example_en: "He received a good education." },
+            { russian: "внимание", pronunciation: "[vnee-MA-nee-ye]", english: "attention", gender: "N", plural_nom: "внимания (abstract)", example_ru: "Обратите внимание!", example_ru_literal: "Turn attention!", example_en: "Pay attention!" },
+            { russian: "развитие", pronunciation: "[raz-VEE-tee-ye]", english: "development", gender: "N", plural_nom: "развития", example_ru: "Это важный этап развития.", example_ru_literal: "This important stage of-development.", example_en: "This is an important stage of development." },
+            { russian: "отношение", pronunciation: "[at-na-SHYE-nee-ye]", english: "relation, attitude", gender: "N", plural_nom: "отношения", example_ru: "У них хорошие отношения.", example_ru_literal: "At-them good relations.", example_en: "They have a good relationship." },
+            { russian: "движение", pronunciation: "[dvee-ZHE-nee-ye]", english: "movement, motion; traffic", gender: "N", plural_nom: "движения", example_ru: "На дороге сильное движение.", example_ru_literal: "On road strong traffic.", example_en: "There is heavy traffic on the road." },
+            { russian: "состояние", pronunciation: "[sas-ta-YA-nee-ye]", english: "state, condition", gender: "N", plural_nom: "состояния", example_ru: "Он в плохом состоянии.", example_ru_literal: "He in bad condition.", example_en: "He is in bad condition." },
+            { russian: "значение", pronunciation: "[zna-CHYE-nee-ye]", english: "meaning, significance", gender: "N", plural_nom: "значения", example_ru: "Какое значение этого слова?", example_ru_literal: "What meaning of-this word?", example_en: "What is the meaning of this word?" },
+            { russian: "действие", pronunciation: "[DYEIST-vee-ye]", english: "action, effect", gender: "N", plural_nom: "действия", example_ru: "Нужно перейти к действиям.", example_ru_literal: "Necessary to-pass to actions.", example_en: "We need to take action." },
+            { russian: "направление", pronunciation: "[na-prav-LYE-nee-ye]", english: "direction", gender: "N", plural_nom: "направления", example_ru: "В каком направлении нам идти?", example_ru_literal: "In what direction to-us to-go?", example_en: "Which direction should we go?" },
+            { russian: "желание", pronunciation: "[zhe-LA-nee-ye]", english: "wish, desire", gender: "N", plural_nom: "желания", example_ru: "У меня есть одно желание.", example_ru_literal: "At-me is one wish.", example_en: "I have one wish." },
+            { russian: "условие", pronunciation: "[oos-LO-vee-ye]", english: "condition, term", gender: "N", plural_nom: "условия", example_ru: "Это главное условие.", example_ru_literal: "This main condition.", example_en: "This is the main condition." },
+            { russian: "начало", pronunciation: "[na-CHA-la]", english: "beginning", gender: "N", plural_nom: "начала", example_ru: "Это только начало.", example_ru_literal: "This only beginning.", example_en: "This is only the beginning." },
+            { russian: "качество", pronunciation: "[KA-chest-va]", english: "quality", gender: "N", plural_nom: "качества", example_ru: "Это товар высокого качества.", example_ru_literal: "This product of-high quality.", example_en: "This is a high-quality product." },
+            { russian: "количество", pronunciation: "[ka-LEE-chest-va]", english: "quantity, amount", gender: "N", plural_nom: "количества", example_ru: "Нужно большое количество.", example_ru_literal: "Necessary big quantity.", example_en: "A large quantity is needed." },
+            { russian: "мнение", pronunciation: "[MNYE-nee-ye]", english: "opinion", gender: "N", plural_nom: "мнения", example_ru: "Каково ваше мнение?", example_ru_literal: "What-is your opinion?", example_en: "What is your opinion?" },
+            { russian: "поведение", pronunciation: "[pa-vye-DYE-nee-ye]", english: "behavior", gender: "N", plural_nom: "поведения (abstract)", example_ru: "Его поведение странное.", example_ru_literal: "His behavior strange.", example_en: "His behavior is strange." },
+            { russian: "пространство", pronunciation: "[pras-TRANST-va]", english: "space", gender: "N", plural_nom: "пространства", example_ru: "В комнате много пространства.", example_ru_literal: "In room much space.", example_en: "There is a lot of space in the room." },
+            { russian: "поколение", pronunciation: "[pa-ka-LYE-nee-ye]", english: "generation", gender: "N", plural_nom: "поколения", example_ru: "Новое поколение мыслит иначе.", example_ru_literal: "New generation thinks differently.", example_en: "The new generation thinks differently." },
+            { russian: "счастье", pronunciation: "[SCHAS-t'ye]", english: "happiness", gender: "N", plural_nom: "счастья (abstract)", example_ru: "Я желаю тебе счастья.", example_ru_literal: "I wish to-you happiness.", example_en: "I wish you happiness." },
+            { russian: "здоровье", pronunciation: "[zda-ROV'-ye]", english: "health", gender: "N", plural_nom: "здоровья (abstract)", example_ru: "Здоровье – это главное.", example_ru_literal: "Health this main-thing.", example_en: "Health is the main thing." },
+            { russian: "оружие", pronunciation: "[a-ROO-zhee-ye]", english: "weapon, arms", gender: "N", plural_nom: "оружия (types)", example_ru: "Это опасное оружие.", example_ru_literal: "This dangerous weapon.", example_en: "This is a dangerous weapon." },
+            { russian: "животное", pronunciation: "[zhee-VOT-na-ye]", english: "animal", gender: "N", plural_nom: "животные", example_ru: "Это дикое животное.", example_ru_literal: "This wild animal.", example_en: "This is a wild animal." },
+            { russian: "растение", pronunciation: "[ras-TYE-nee-ye]", english: "plant", gender: "N", plural_nom: "растения", example_ru: "Это редкое растение.", example_ru_literal: "This rare plant.", example_en: "This is a rare plant." },
+            { russian: "дерево", pronunciation: "[DYE-re-va]", english: "tree; wood", gender: "N", plural_nom: "деревья", example_ru: "Это старое дерево.", example_ru_literal: "This old tree.", example_en: "This is an old tree." },
+            { russian: "лето", pronunciation: "[LYE-ta]", english: "summer", gender: "N", plural_nom: "лета (poetic)", example_ru: "Летом очень тепло.", example_ru_literal: "In-summer very warm.", example_en: "It's very warm in the summer." },
+            { russian: "тело", pronunciation: "[TYE-la]", english: "body", gender: "N", plural_nom: "тела", example_ru: "Заботьтесь о своём теле.", example_ru_literal: "Take-care about your body.", example_en: "Take care of your body." },
+            { russian: "вино", pronunciation: "[vee-NO]", english: "wine", gender: "N", plural_nom: "вина (types)", example_ru: "Я предпочитаю красное вино.", example_ru_literal: "I prefer red wine.", example_en: "I prefer red wine." },
+            { russian: "пиво", pronunciation: "[PEE-va]", english: "beer", gender: "N", plural_nom: "пива (types)", example_ru: "Он пьёт холодное пиво.", example_ru_literal: "He drinks cold beer.", example_en: "He is drinking cold beer." },
+            { russian: "молоко", pronunciation: "[ma-la-KO]", english: "milk", gender: "N", plural_nom: "молока (types)", example_ru: "Ребёнок пьёт молоко.", example_ru_literal: "Child drinks milk.", example_en: "The child is drinking milk." },
+            { russian: "мясо", pronunciation: "[MYA-sa]", english: "meat", gender: "N", plural_nom: "мяса (types)", example_ru: "Я не ем мясо.", example_ru_literal: "I not eat meat.", example_en: "I don't eat meat." },
+            { russian: "золото", pronunciation: "[ZO-la-ta]", english: "gold", gender: "N", plural_nom: "золота (abstract)", example_ru: "Это кольцо из золота.", example_ru_literal: "This ring from gold.", example_en: "This ring is made of gold." },
+            { russian: "серебро", pronunciation: "[sye-rye-BRO]", english: "silver", gender: "N", plural_nom: "серебра (abstract)", example_ru: "Ложка из серебра.", example_ru_literal: "Spoon from silver.", example_en: "The spoon is made of silver." },
+            { russian: "небо", pronunciation: "[NYE-ba]", english: "sky, heaven", gender: "N", plural_nom: "небеса", example_ru: "Небо сегодня голубое.", example_ru_literal: "Sky today blue.", example_en: "The sky is blue today." },
+            { russian: "поле", pronunciation: "[PO-lye]", english: "field", gender: "N", plural_nom: "поля", example_ru: "Мы гуляем по полю.", example_ru_literal: "We walk through field.", example_en: "We are walking through the field." },
+            { russian: "озеро", pronunciation: "[O-zye-ra]", english: "lake", gender: "N", plural_nom: "озёра", example_ru: "Это глубокое озеро.", example_ru_literal: "This deep lake.", example_en: "This is a deep lake." },
+            { russian: "стекло", pronunciation: "[stye-KLO]", english: "glass (material)", gender: "N", plural_nom: "стёкла (panes)", example_ru: "Окно сделано из стекла.", example_ru_literal: "Window made from glass.", example_en: "The window is made of glass." },
+            { russian: "зеркало", pronunciation: "[ZYER-ka-la]", english: "mirror", gender: "N", plural_nom: "зеркала", example_ru: "Посмотри в зеркало.", example_ru_literal: "Look in mirror.", example_en: "Look in the mirror." },
+            { russian: "кресло", pronunciation: "[KRYES-la]", english: "armchair", gender: "N", plural_nom: "кресла", example_ru: "Он сидит в удобном кресле.", example_ru_literal: "He sits in comfortable armchair.", example_en: "He is sitting in a comfortable armchair." },
+            { russian: "мыло", pronunciation: "[MI-la]", english: "soap", gender: "N", plural_nom: "мыла (types)", example_ru: "Помой руки с мылом.", example_ru_literal: "Wash hands with soap.", example_en: "Wash your hands with soap." },
+            { russian: "масло", pronunciation: "[MAS-la]", english: "butter; oil", gender: "N", plural_nom: "масла (types)", example_ru: "Намажь масло на хлеб.", example_ru_literal: "Spread butter on bread.", example_en: "Spread butter on the bread." },
+            { russian: "полотенце", pronunciation: "[pa-la-TYEN-tse]", english: "towel", gender: "N", plural_nom: "полотенца", example_ru: "Возьми чистое полотенце.", example_ru_literal: "Take clean towel.", example_en: "Take a clean towel." },
+            { russian: "платье", pronunciation: "[PLAT'-ye]", english: "dress", gender: "N", plural_nom: "платья", example_ru: "У неё красивое платье.", example_ru_literal: "At-her beautiful dress.", example_en: "She has a beautiful dress." },
+            { russian: "пальто", pronunciation: "[pal'-TO]", english: "coat (overcoat)", gender: "N", plural_nom: "пальто (indecl.)", example_ru: "Надень пальто, на улице холодно.", example_ru_literal: "Put-on coat, on street cold.", example_en: "Put on your coat, it's cold outside." },
+            { russian: "радио", pronunciation: "[RA-dee-o]", english: "radio", gender: "N", plural_nom: "радио (indecl.)", example_ru: "Я слушаю радио.", example_ru_literal: "I listen radio.", example_en: "I am listening to the radio." },
+            { russian: "кино", pronunciation: "[kee-NO]", english: "cinema, movies", gender: "N", plural_nom: "кино (indecl.)", example_ru: "Мы идём в кино.", example_ru_literal: "We go to cinema.", example_en: "We are going to the cinema." },
+            { russian: "метро", pronunciation: "[myet-RO]", english: "metro, subway", gender: "N", plural_nom: "метро (indecl.)", example_ru: "Я еду на метро.", example_ru_literal: "I go by metro.", example_en: "I am going by metro." },
+            { russian: "фото", pronunciation: "[FO-ta]", english: "photo", gender: "N", plural_nom: "фото (indecl.)", example_ru: "Сделай фото.", example_ru_literal: "Make photo.", example_en: "Take a photo." },
+            { russian: "такси", pronunciation: "[tak-SEE]", english: "taxi", gender: "N", plural_nom: "такси (indecl.)", example_ru: "Вызови такси.", example_ru_literal: "Call taxi.", example_en: "Call a taxi." },
+            { russian: "меню", pronunciation: "[mye-NYOO]", english: "menu", gender: "N", plural_nom: "меню (indecl.)", example_ru: "Дайте мне меню, пожалуйста.", example_ru_literal: "Give to-me menu, please.", example_en: "Give me the menu, please." },
+            { russian: "шоссе", pronunciation: "[sha-SSE]", english: "highway", gender: "N", plural_nom: "шоссе (indecl.)", example_ru: "Мы едем по шоссе.", example_ru_literal: "We drive along highway.", example_en: "We are driving on the highway." },
+            { russian: "лицо", pronunciation: "[lee-TSO]", english: "face", gender: "N", plural_nom: "лица", example_ru: "У неё красивое лицо.", example_ru_literal: "At-her beautiful face.", example_en: "She has a beautiful face." },
+            { russian: "сердце", pronunciation: "[SYERT-se]", english: "heart", gender: "N", plural_nom: "сердца", example_ru: "Моё сердце бьётся быстро.", example_ru_literal: "My heart beats fast.", example_en: "My heart is beating fast." },
+            { russian: "плечо", pronunciation: "[plye-CHO]", english: "shoulder", gender: "N", plural_nom: "плечи", example_ru: "Он похлопал меня по плечу.", example_ru_literal: "He patted me on shoulder.", example_en: "He patted me on the shoulder." },
+            { russian: "колено", pronunciation: "[ka-LYE-na]", english: "knee", gender: "N", plural_nom: "колени", example_ru: "Я ударил колено.", example_ru_literal: "I hit knee.", example_en: "I hit my knee." },
+            { russian: "дерево", pronunciation: "[DYE-rye-va]", english: "tree", gender: "N", plural_nom: "деревья", example_ru: "Это высокое дерево.", example_ru_literal: "This tall tree.", example_en: "This is a tall tree." },
+            { russian: "яблоко", pronunciation: "[YA-bla-ka]", english: "apple", gender: "N", plural_nom: "яблоки", example_ru: "Я люблю есть яблоки.", example_ru_literal: "I love to-eat apples.", example_en: "I like to eat apples." },
+            { russian: "яйцо", pronunciation: "[yai-TSO]", english: "egg", gender: "N", plural_nom: "яйца", example_ru: "Свари мне яйцо.", example_ru_literal: "Boil to-me egg.", example_en: "Boil an egg for me." },
+
+            // Plural Only Nouns (Expanded)
+            { russian: "деньги", pronunciation: "[DYEN'-gee]", english: "money", gender: "Pl", plural_nom: "деньги", example_ru: "У меня есть деньги.", example_ru_literal: "At-me is money.", example_en: "I have money." },
+            { russian: "очки", pronunciation: "[ach-KEE]", english: "glasses", gender: "Pl", plural_nom: "очки", example_ru: "Он носит очки.", example_ru_literal: "He wears glasses.", example_en: "He wears glasses." },
+            { russian: "часы", pronunciation: "[cha-SI]", english: "watch, clock", gender: "Pl", plural_nom: "часы", example_ru: "Мои часы остановились.", example_ru_literal: "My watch stopped.", example_en: "My watch has stopped." },
+            { russian: "брюки", pronunciation: "[BRYOO-kee]", english: "trousers, pants", gender: "Pl", plural_nom: "брюки", example_ru: "Это новые брюки.", example_ru_literal: "These new trousers.", example_en: "These are new trousers." },
+            { russian: "ножницы", pronunciation: "[NOZH-nee-tsi]", english: "scissors", gender: "Pl", plural_nom: "ножницы", example_ru: "Где мои ножницы?", example_ru_literal: "Where my scissors?", example_en: "Where are my scissors?" },
+            { russian: "каникулы", pronunciation: "[ka-NEE-koo-li]", english: "holidays, vacation (school)", gender: "Pl", plural_nom: "каникулы", example_ru: "Скоро летние каникулы.", example_ru_literal: "Soon summer holidays.", example_en: "Summer holidays are soon." },
+            { russian: "шахматы", pronunciation: "[SHAKH-ma-ti]", english: "chess", gender: "Pl", plural_nom: "шахматы", example_ru: "Мы играем в шахматы.", example_ru_literal: "We play in chess.", example_en: "We are playing chess." },
+            { russian: "сливки", pronunciation: "[SLEEF-kee]", english: "cream (dairy)", gender: "Pl", plural_nom: "сливки", example_ru: "Добавь сливки в кофе.", example_ru_literal: "Add cream to coffee.", example_en: "Add cream to the coffee." },
+            { russian: "духи", pronunciation: "[doo-KHEE]", english: "perfume", gender: "Pl", plural_nom: "духи", example_ru: "У неё приятные духи.", example_ru_literal: "At-her pleasant perfume.", example_en: "She has a pleasant perfume." },
+            { russian: "сани", pronunciation: "[SA-nee]", english: "sleigh, sled", gender: "Pl", plural_nom: "сани", example_ru: "Дети катаются на санях.", example_ru_literal: "Children ride on sleigh.", example_en: "Children are sleigh riding." },
+            { russian: "чернила", pronunciation: "[cher-NEE-la]", english: "ink", gender: "Pl", plural_nom: "чернила", example_ru: "В ручке закончились чернила.", example_ru_literal: "In pen finished ink.", example_en: "The pen ran out of ink." },
+            { russian: "обои", pronunciation: "[a-BO-ee]", english: "wallpaper", gender: "Pl", plural_nom: "обои", example_ru: "Мы выбрали новые обои.", example_ru_literal: "We chose new wallpaper.", example_en: "We chose new wallpaper." },
+            { russian: "дрова", pronunciation: "[dra-VA]", english: "firewood", gender: "Pl", plural_nom: "дрова", example_ru: "Нужно нарубить дрова.", example_ru_literal: "Necessary to-chop firewood.", example_en: "We need to chop firewood." },
+            { russian: "сливы", pronunciation: "[SLEE-vi]", english: "plums (though singular 'слива' exists)", gender: "Pl", plural_nom: "сливы", example_ru: "Я люблю есть сливы.", example_ru_literal: "I love to-eat plums.", example_en: "I like to eat plums." },
+            { russian: "будни", pronunciation: "[BOOD-nee]", english: "weekdays", gender: "Pl", plural_nom: "будни", example_ru: "В будни я работаю.", example_ru_literal: "On weekdays I work.", example_en: "I work on weekdays." }
+        ];
+
+        const genderNav = document.getElementById('gender-nav');
+        const nounGrid = document.getElementById('noun-grid');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const genders = ['All', 'Masculine', 'Feminine', 'Neuter', 'Plural Only'];
+
+            genders.forEach(gender => {
+                const button = document.createElement('button');
+                button.textContent = gender;
+                button.dataset.gender = gender;
+                button.className = 'nav-button px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all';
+                genderNav.appendChild(button);
+            });
+
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    renderNouns(button.dataset.gender);
+                });
+            });
+
+            if (navButtons.length > 0) {
+                navButtons[0].classList.add('active');
+            }
+            renderNouns('All');
+        });
+
+        function renderNouns(filterGender) {
+            nounGrid.innerHTML = '';
+            const filteredNouns = filterGender === 'All'
+                ? nounData
+                : nounData.filter(n => {
+                    if (filterGender === 'Masculine') return n.gender === 'M';
+                    if (filterGender === 'Feminine') return n.gender === 'F';
+                    if (filterGender === 'Neuter') return n.gender === 'N';
+                    if (filterGender === 'Plural Only') return n.gender === 'Pl';
+                    return false;
+                });
+
+            filteredNouns.forEach(noun => {
+                const card = document.createElement('div');
+                card.className = 'noun-card cursor-pointer bg-white p-4 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300';
+
+                let nounInfoHtml = `<ul class="list-none pl-0 text-xs space-y-1">`;
+                nounInfoHtml += `<li><strong class="font-medium info-label">Gender:</strong> <span class="info-value">${noun.gender}</span></li>`;
+                if (noun.plural_nom) {
+                    nounInfoHtml += `<li><strong class="font-medium info-label">Plural (Nom.):</strong> <span class="info-value">${noun.plural_nom}</span></li>`;
+                }
+                nounInfoHtml += `</ul>`;
+
+                card.innerHTML = `
+                    <div class="flex flex-col justify-center items-center text-center">
+                        <h3 class="text-xl font-semibold text-gray-900">${noun.russian}</h3>
+                        <p class="text-gray-500">${noun.english}</p>
+                        <div class="noun-card-details text-left w-full mt-4 border-t pt-4">
+                            <p class="text-sm"><strong class="font-medium info-label">Pronunciation:</strong> <span class="info-value">${noun.pronunciation}</span></p>
+                            <div class="noun-info mt-2 mb-2">
+                                ${nounInfoHtml}
+                            </div>
+                            <p class="text-sm mt-2"><strong class="font-medium info-label">Example (RU):</strong> <span class="info-value">${noun.example_ru}</span></p>
+                            <p class="text-sm literal-translation"><em>Literal: "${noun.example_ru_literal}"</em></p>
+                            <p class="text-sm text-gray-500 italic mb-2">Natural: "${noun.example_en}"</p>
+                        </div>
+                    </div>
+                `;
+
+                nounGrid.appendChild(card);
+
+                card.addEventListener('click', () => {
+                    card.classList.toggle('active');
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russian Vocabulary Learning Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #FDFDFB;
+            /* Warm neutral background */
+            font-family: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        .hub-button {
+            background-color: #A3BFFA;
+            /* A soft, inviting blue */
+            color: #1E3A8A;
+            /* Darker blue text for contrast */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .hub-button:hover {
+            background-color: #81A9F9;
+            /* Slightly darker blue on hover */
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 flex items-center justify-center min-h-screen">
+
+    <div class="container mx-auto px-4 py-12 text-center">
+        <header class="mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-900">Russian Vocobulary Learning Hub</h1>
+            <p class="mt-4 text-xl text-gray-600">Choose a category to start learning!</p>
+        </header>
+
+        <main class="max-w-md mx-auto space-y-6">
+            <a href="nouns.html"
+                class="hub-button block w-full text-lg font-semibold py-4 px-6 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Learn Nouns
+            </a>
+
+            <a href="verbs.html"
+                class="hub-button block w-full text-lg font-semibold py-4 px-6 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Learn Verbs
+            </a>
+
+            <a href="adjectives.html"
+                class="hub-button block w-full text-lg font-semibold py-4 px-6 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Learn Adjectives
+            </a>
+        </main>
+
+        <footer class="text-center mt-16 text-gray-500">
+            <p>&copy; 2025 Ersin Çine</p>
+        </footer>
+    </div>
+</body>
+
+</html>
